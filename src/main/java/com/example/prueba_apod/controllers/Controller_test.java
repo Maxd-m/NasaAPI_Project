@@ -1,16 +1,14 @@
-package com.example.prueba_apod;
+package com.example.prueba_apod.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -19,6 +17,8 @@ import java.util.logging.Logger;
 public class Controller_test {
     @FXML
     private Button btnBack;
+    @FXML
+    private RadioButton btnUser;
 
     private Stage stage;
     private Scene scene;
@@ -29,7 +29,7 @@ public class Controller_test {
 
          try {
             // Cargo la vista
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("apod-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/apod-view.fxml"));
 
 
             // Cargo el padre
@@ -38,6 +38,9 @@ public class Controller_test {
             // Obtengo el controlador
             //InsertarServiciosController controlador = loader.getController();
             ControllerAPOD controlador = loader.getController();
+            controlador.setUser(btnUser.selectedProperty().get());
+
+             System.out.println(btnUser.selectedProperty().get());
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 

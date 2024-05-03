@@ -1,12 +1,11 @@
-package com.example.prueba_apod;
+package com.example.prueba_apod.controllers;
 
 import com.example.prueba_apod.models.APOD;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -28,8 +27,6 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import com.google.gson.Gson;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -50,20 +47,36 @@ public class ControllerAPOD implements Initializable {
     private DatePicker datePicker;
     @FXML
     private Panel mainPanel;
-    //@FXML
-    //private AnchorPane ap;
+    @FXML
+    private Label loadingLabel;
     @FXML
     private Button btnBack;
     @FXML
     private Button searchBtn;
+    @FXML
+    private Button btnSave;
 
     private APOD apod;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private boolean isUser;
+    private boolean flgLoading;
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        datePicker.setValue(LocalDate.now());
+        webView.setVisible(false);
+        mainPanel.getStyleClass().add("panel-default");
+
+
+
+        // Scene sc = new Scene(new VBox());
+
+        //sc.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
+    }
 
     @FXML
     protected void onSearchButtonClick() throws IOException {
@@ -72,8 +85,7 @@ public class ControllerAPOD implements Initializable {
         //DEMO_KEY
         //video= 2024-04-14
         //imagen 2024-01-01
-        //Scene sc = ap.getScene();
-        //sc.setCursor(Cursor.WAIT);
+
         searchBtn.setDisable(true);
 
         URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+datePicker.getValue().toString());
@@ -173,6 +185,7 @@ public class ControllerAPOD implements Initializable {
             titleLabel.setText(apod.getTitle());
             contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
             searchBtn.setDisable(false);
+
             //sc.setCursor(Cursor.DEFAULT);
 
         }
@@ -198,23 +211,13 @@ public class ControllerAPOD implements Initializable {
         alert.show();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        datePicker.setValue(LocalDate.now());
-        webView.setVisible(false);
-        mainPanel.getStyleClass().add("panel-default");
-
-       // Scene sc = new Scene(new VBox());
-
-       //sc.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
-    }
 
     @FXML
     public void onBackButtonClick(ActionEvent actionEvent) {
 
           try {
             // Cargo la vista
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("test-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/test-view.fxml"));
 
             // Cargo el padre
             Parent root = loader.load();
@@ -275,5 +278,23 @@ public class ControllerAPOD implements Initializable {
         }
         * */
 
+    }
+
+    public boolean getIsUser() {
+        return isUser;
+    }
+
+    public void setUser(boolean user) {
+        isUser = user;
+        if(!isUser){
+            btnSave.setVisible(false);
+        }else {
+            btnSave.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void onSaveButtonCLick(ActionEvent actionEvent) {
+        //Save JSON
     }
 }

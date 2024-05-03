@@ -13,10 +13,10 @@ import java.io.IOException;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = FXMLLoader.load(HelloApplication.class.getResource("apod-view.fxml"));
+        Parent root = FXMLLoader.load(HelloApplication.class.getResource("views/test-view.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
-        stage.setTitle("APOD");
+        stage.setTitle("NASA API");
         stage.setMaximized(true);
         stage.setScene(scene);
         stage.show();

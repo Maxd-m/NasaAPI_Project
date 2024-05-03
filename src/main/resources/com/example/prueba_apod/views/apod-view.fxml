@@ -18,14 +18,14 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.prueba_apod.ControllerAPOD">
+            fx:controller="com.example.prueba_apod.controllers.ControllerAPOD">
 
 
 
         <VBox spacing="5" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
 
             <ToolBar>
-                <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick"/>
+                <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick" styleClass="btn,btn-default, btn-xs"/>
             </ToolBar>
 
             <Panel fx:id="mainPanel" >
@@ -46,8 +46,10 @@
                         </padding>
 
                         <HBox spacing="10" alignment="CENTER">
+                            <Label fx:id="loadingLabel" />
                             <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
                             <DatePicker fx:id="datePicker" onAction="#onDatePicked" editable="false" />
+                            <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick"/>
                         </HBox>
 
                         <ScrollPane fitToHeight="true" fitToWidth="true">

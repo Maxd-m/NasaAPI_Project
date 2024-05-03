@@ -9,6 +9,11 @@ module com.example.prueba_apod {
     requires org.kordamp.bootstrapfx.core;
     requires com.google.gson;
     requires java.logging;
+    requires kernel;
+    requires layout;
+    requires java.desktop;
+    requires org.slf4j;
+    requires org.apache.logging.log4j;
 
     opens com.example.prueba_apod to javafx.fxml;
     opens com.example.prueba_apod.models to com.google.gson;

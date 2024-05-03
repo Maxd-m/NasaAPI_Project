@@ -1,7 +1,7 @@
 package com.example.prueba_apod.controllers;
 
 import com.example.prueba_apod.models.APOD;
-import javafx.application.Platform;
+import com.example.prueba_apod.reports.ReportAPOD;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +15,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.awt.*;
+import java.io.File;
+import java.util.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 //import javafx.scene;
@@ -24,8 +28,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+
 import com.google.gson.Gson;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
@@ -55,6 +58,8 @@ public class ControllerAPOD implements Initializable {
     private Button searchBtn;
     @FXML
     private Button btnSave;
+    @FXML
+    private Button btnReport;
 
     private APOD apod;
 
@@ -145,10 +150,12 @@ public class ControllerAPOD implements Initializable {
                 image.setVisible(true);
                 webView.setVisible(false);
                 Image auxImage=new Image(apod.getUrl());
+
                 //image=new ImageView(auxImage);
                 image.setImage(auxImage);
                 image.setFitWidth(300); // Ajusta el ancho según sea necesario
                 image.setPreserveRatio(true);
+
                 //mainVbox.getChildren().add(image);
                 System.out.println("after image");
             }
@@ -288,13 +295,78 @@ public class ControllerAPOD implements Initializable {
         isUser = user;
         if(!isUser){
             btnSave.setVisible(false);
+            btnReport.setVisible(false);
         }else {
             btnSave.setVisible(true);
+            btnReport.setVisible(true);
         }
     }
 
     @FXML
     public void onSaveButtonCLick(ActionEvent actionEvent) {
         //Save JSON
+    }
+
+    public void onReportButtonCLick(ActionEvent actionEvent) {
+        String dest = "reports/Report_APOD.pdf";
+        try {
+            new ReportAPOD().createReport(dest);
+            openFile(dest);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void openFile(String filename)
+    {
+        if (Desktop.isDesktopSupported()) {
+            try {
+                File myFile = new File(filename);
+                Desktop.getDesktop().open(myFile);
+            } catch (IOException ex) {
+                // no application registered for PDFs
+            }
+        }
+    }
+
+    private List<APOD> getWeekImages() throws Exception{
+        List<APOD> apodList = new ArrayList<>();
+        List<LocalDate> week = new ArrayList<>();
+        //week.add(LocalDate.now());
+        for (int i = 0; i < 7; i++) {
+            week.add(LocalDate.now().minusDays(i));
+        }
+
+        //colocar codigo dentro de un ciclo para obtener apods de todas las fechas de week
+        URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+week.get(0).toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.connect();
+
+        int responseCode = conn.getResponseCode();
+        if(responseCode!=200&&responseCode!=429){
+            throw new RuntimeException("Error "+responseCode);
+        }
+        else {
+            //abrir scanner para leer datos:
+            StringBuilder infoString = new StringBuilder();
+            Scanner scanner = new Scanner(url.openStream());
+
+            while (scanner.hasNext()) {
+                infoString.append(scanner.nextLine());
+            }
+
+            scanner.close();
+
+            //imprimir info
+            System.out.println(infoString);
+            Gson gson = new Gson();
+            String aux = String.valueOf(infoString);
+            apod = gson.fromJson(aux, APOD.class);
+            apodList.add(apod);
+        }
+
+
+        return apodList;
     }
 }

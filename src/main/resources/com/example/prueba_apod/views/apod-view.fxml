@@ -17,8 +17,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Tooltip?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.prueba_apod.controllers.ControllerAPOD">
+      fx:controller="com.example.prueba_apod.controllers.ControllerAPOD">
 
 
 
@@ -49,7 +50,12 @@
                             <Label fx:id="loadingLabel" />
                             <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
                             <DatePicker fx:id="datePicker" onAction="#onDatePicked" editable="false" />
-                            <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick"/>
+                            <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick">
+                                <tooltip><Tooltip text="Save APOD to database"/> </tooltip>
+                            </Button>
+                            <Button fx:id="btnReport" text="Report" styleClass="btn, btn-success" onAction="#onReportButtonCLick">
+                                <tooltip><Tooltip text="Generate PDF Report of last week images"/></tooltip>
+                            </Button>
                         </HBox>
 
                         <ScrollPane fitToHeight="true" fitToWidth="true">

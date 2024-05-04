@@ -3,29 +3,37 @@ package com.example.prueba_apod.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.kordamp.bootstrapfx.BootstrapFX;
+import org.kordamp.bootstrapfx.scene.layout.Panel;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller_test {
+public class Controller_test implements Initializable {
     @FXML
-    private Button btnBack;
+    private Button btnAPOD;
     @FXML
     private RadioButton btnUser;
+    @FXML
+    private Panel mainPanel;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
-
-    public void onBackButtonClick(ActionEvent actionEvent) {
+    @FXML
+    public void onAPODButtonClick(ActionEvent actionEvent) {
 
          try {
             // Cargo la vista
@@ -42,7 +50,7 @@ public class Controller_test {
 
              System.out.println(btnUser.selectedProperty().get());
 
-            VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
+            VBox currentRoot = (VBox) this.btnAPOD.getScene().getRoot();
 
             // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
@@ -86,5 +94,18 @@ public class Controller_test {
         }
         * */
 
+    }
+
+    @FXML
+    public void onImgVidLibButtonCLick(ActionEvent actionEvent) {
+    }
+
+    @FXML
+    public void onAsteroidsButtonCLick(ActionEvent actionEvent) {
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        mainPanel.getStyleClass().add("panel-default");
     }
 }

@@ -6,14 +6,39 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.kordamp.bootstrapfx.scene.layout.Panel?>
+<?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.prueba_apod.controllers.Controller_test" >
-    <VBox>
-        <Label text="Prueba exitosa"/>
-        <Button fx:id="btnBack" text="APOD" onAction="#onBackButtonClick"/>
-        <RadioButton fx:id="btnUser" text="IS USER?"/>
-    </VBox>
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.prueba_apod.controllers.Controller_test" >
+
+    <ToolBar>
+        <Button text="Back">
+            <tooltip><Tooltip text="Go back to login"/></tooltip>
+        </Button>
+    </ToolBar>
+
+    <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS" >
+        <heading>
+            <HBox spacing="10">
+                <Label text="MENU " styleClass="h3"/>
+                <Label text="Select an api to start" styleClass="h4"/>
+            </HBox>
+        </heading>
+
+        <body>
+            <VBox spacing="20.0" alignment="CENTER">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                </padding>
+                <RadioButton fx:id="btnUser" text="IS USER?"/>
+                <Button fx:id="btnAPOD" text="APOD" styleClass="btn, btn-lg" onAction="#onAPODButtonClick"/>
+                <Button fx:id="btnImageVideoLib" text="NASA Image and Video Library" styleClass="btn, btn-lg" onAction="#onImgVidLibButtonCLick"/>
+                <Button fx:id="btnAsteroids" text="Asteroids NeoWs" styleClass="btn, btn-lg" onAction="#onAsteroidsButtonCLick"/>
+            </VBox>
+        </body>
+    </Panel>
+
 
 
 </VBox>

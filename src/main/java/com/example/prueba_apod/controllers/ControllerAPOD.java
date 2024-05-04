@@ -310,9 +310,10 @@ public class ControllerAPOD implements Initializable {
     public void onReportButtonCLick(ActionEvent actionEvent) {
         String dest = "reports/Report_APOD.pdf";
         try {
+            getWeekImages();
             new ReportAPOD().createReport(dest);
             openFile(dest);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -331,42 +332,43 @@ public class ControllerAPOD implements Initializable {
 
     private List<APOD> getWeekImages() throws Exception{
         List<APOD> apodList = new ArrayList<>();
-        List<LocalDate> week = new ArrayList<>();
-        //week.add(LocalDate.now());
+
         for (int i = 0; i < 7; i++) {
-            week.add(LocalDate.now().minusDays(i));
-        }
+         //   week.add(LocalDate.now().minusDays(i));
 
-        //colocar codigo dentro de un ciclo para obtener apods de todas las fechas de week
-        URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+week.get(0).toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.connect();
+            //colocar codigo dentro de un ciclo para obtener apods de todas las fechas de week
+            URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+LocalDate.now().minusDays(i).toString());
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
 
-        int responseCode = conn.getResponseCode();
-        if(responseCode!=200&&responseCode!=429){
-            throw new RuntimeException("Error "+responseCode);
-        }
-        else {
-            //abrir scanner para leer datos:
-            StringBuilder infoString = new StringBuilder();
-            Scanner scanner = new Scanner(url.openStream());
+            int responseCode = conn.getResponseCode();
+            if(responseCode!=200&&responseCode!=429){
+                throw new RuntimeException("Error "+responseCode);
+            }
+            else {
+                //abrir scanner para leer datos:
+                StringBuilder infoString = new StringBuilder();
+                Scanner scanner = new Scanner(url.openStream());
 
-            while (scanner.hasNext()) {
-                infoString.append(scanner.nextLine());
+                while (scanner.hasNext()) {
+                    infoString.append(scanner.nextLine());
+                }
+
+                scanner.close();
+
+                //imprimir info
+                System.out.println(infoString);
+                Gson gson = new Gson();
+                String aux = String.valueOf(infoString);
+                apod = gson.fromJson(aux, APOD.class);
+                apodList.add(apod);
             }
 
-            scanner.close();
+            //System.out.println(LocalDate.now().minusDays(i));
 
-            //imprimir info
-            System.out.println(infoString);
-            Gson gson = new Gson();
-            String aux = String.valueOf(infoString);
-            apod = gson.fromJson(aux, APOD.class);
-            apodList.add(apod);
         }
-
-
+        
         return apodList;
     }
 }

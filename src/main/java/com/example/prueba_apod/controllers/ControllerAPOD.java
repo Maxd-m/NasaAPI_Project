@@ -224,14 +224,14 @@ public class ControllerAPOD implements Initializable {
 
           try {
             // Cargo la vista
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/test-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/menu-view.fxml"));
 
             // Cargo el padre
             Parent root = loader.load();
 
             // Obtengo el controlador
             //InsertarServiciosController controlador = loader.getController();
-            Controller_test controlador = loader.getController();
+            ControllerMenu controlador = loader.getController();
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 
@@ -263,7 +263,7 @@ public class ControllerAPOD implements Initializable {
 
 
         /*
-        * FXMLLoader loader = new FXMLLoader(getClass().getResource("test-view.fxml"));
+        * FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
         try {
             Node view = loader.load();
            // content.getChildren().setAll(view);
@@ -274,7 +274,7 @@ public class ControllerAPOD implements Initializable {
 
         /*
         * try {
-            root=FXMLLoader.load(HelloApplication.class.getResource("test-view.fxml"));
+            root=FXMLLoader.load(HelloApplication.class.getResource("menu-view.fxml"));
             stage=(Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             scene=new Scene(root);
             stage.setScene(scene);

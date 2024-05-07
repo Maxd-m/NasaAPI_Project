@@ -10,27 +10,29 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
 import org.kordamp.bootstrapfx.scene.layout.Panel;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Controller_test implements Initializable {
+public class ControllerMenu implements Initializable {
     @FXML
     private Button btnAPOD;
     @FXML
     private RadioButton btnUser;
     @FXML
     private Panel mainPanel;
+    @FXML
+    private VBox rootVbox;
+
 
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private boolean isUser;
 
     @FXML
     public void onAPODButtonClick(ActionEvent actionEvent) {
@@ -46,9 +48,9 @@ public class Controller_test implements Initializable {
             // Obtengo el controlador
             //InsertarServiciosController controlador = loader.getController();
             ControllerAPOD controlador = loader.getController();
-            controlador.setUser(btnUser.selectedProperty().get());
+            controlador.setUser(isUser);
 
-             System.out.println(btnUser.selectedProperty().get());
+             System.out.println(isUser);
 
             VBox currentRoot = (VBox) this.btnAPOD.getScene().getRoot();
 
@@ -104,8 +106,47 @@ public class Controller_test implements Initializable {
     public void onAsteroidsButtonCLick(ActionEvent actionEvent) {
     }
 
+    public boolean isUser() {
+        return isUser;
+    }
+
+    public void setUser(boolean user) {
+        isUser = user;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        btnUser.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
+       // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
+       // VBox.setVgrow(mainPanel, Priority.ALWAYS);
+    }
+
+    @FXML
+    public void onLogOutButtonClick(ActionEvent actionEvent) {
+        try {
+            // Cargo la vista
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/innit-view.fxml"));
+
+
+            // Cargo el padre
+            Parent root = loader.load();
+
+            // Obtengo el controlador
+            //InsertarServiciosController controlador = loader.getController();
+            InnitController controlador = loader.getController();
+            //controlador.setUser(isUser);
+
+            //System.out.println(isUser);
+
+            VBox currentRoot = (VBox) this.btnAPOD.getScene().getRoot();
+
+            // Reemplazo el contenido del contenedor actual con el nuevo contenido
+            currentRoot.getChildren().setAll(root);
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -8,26 +8,26 @@
 
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
 <?import javafx.geometry.Insets?>
-<VBox xmlns="http://javafx.com/javafx"
+<VBox fx:id="rootVbox" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.prueba_apod.controllers.Controller_test" >
+      fx:controller="com.example.prueba_apod.controllers.ControllerMenu" alignment="CENTER" prefHeight="Infinity" prefWidth="Infinity">
 
     <ToolBar>
-        <Button text="Back">
+        <Button fx:id="btnLogOut" text="Log out" onAction="#onLogOutButtonClick" styleClass="btn,btn-default, btn-xs">
             <tooltip><Tooltip text="Go back to login"/></tooltip>
         </Button>
     </ToolBar>
 
-    <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS" >
+    <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS">
         <heading>
             <HBox spacing="10">
                 <Label text="MENU " styleClass="h3"/>
-                <Label text="Select an api to start" styleClass="h4"/>
+                <Label text="Select an api" styleClass="h4"/>
             </HBox>
         </heading>
 
         <body>
-            <VBox spacing="20.0" alignment="CENTER">
+            <VBox spacing="40.0" alignment="CENTER">
                 <padding>
                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>

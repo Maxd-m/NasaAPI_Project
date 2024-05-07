@@ -32,7 +32,6 @@
             <Panel fx:id="mainPanel" >
 
                 <heading>
-
                     <HBox spacing="10">
                         <Label text="APOD " styleClass="h3"/>
                         <Label text="(Astronomy Picture of the Day)" styleClass="h4"/>

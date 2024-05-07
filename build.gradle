@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'com.example.prueba_apod'
-    mainClass = 'com.example.prueba_apod.HelloApplication'
+    mainClass = 'com.example.prueba_apod.MainApplication'
 }
 
 javafx {
@@ -38,6 +38,9 @@ dependencies {
     implementation('com.dlsc.formsfx:formsfx-core:11.6.0') {
         exclude(group: 'org.openjfx')
     }
+
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.3.0'
+
     implementation('org.kordamp.ikonli:ikonli-javafx:12.3.1')
     implementation('org.kordamp.bootstrapfx:bootstrapfx-core:0.4.0')
     implementation 'com.google.code.gson:gson:2.10.1'

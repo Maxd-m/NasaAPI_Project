@@ -14,6 +14,7 @@ module com.example.prueba_apod {
     requires java.desktop;
     requires org.slf4j;
     requires org.apache.logging.log4j;
+    requires java.sql;
 
     opens com.example.prueba_apod to javafx.fxml;
     opens com.example.prueba_apod.models to com.google.gson;

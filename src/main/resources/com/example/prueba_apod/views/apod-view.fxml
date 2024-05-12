@@ -18,6 +18,8 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.text.Text?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.prueba_apod.controllers.ControllerAPOD" alignment="CENTER">
 
@@ -29,7 +31,7 @@
                 </Button>
             </ToolBar>
 
-            <Panel fx:id="mainPanel" >
+            <Panel fx:id="mainPanel">
 
                 <heading>
                     <HBox spacing="10">
@@ -46,7 +48,7 @@
                         </padding>
 
                         <HBox spacing="10" alignment="CENTER">
-                            <Label fx:id="loadingLabel" />
+
                             <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
                             <DatePicker fx:id="datePicker" onAction="#onDatePicked" editable="false" />
                             <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick">
@@ -72,6 +74,14 @@
                     </VBox>
                 </body>
 
+                <bottom >
+                    <HBox>
+                        <TextFlow fx:id="msgContainer" HBox.hgrow="ALWAYS" >
+                            <Text fx:id="msgTitle" styleClass="strong" style="-fx-font-size: 24"/>
+                            <Text fx:id="msgContent" style="-fx-font-size: 24"/>
+                        </TextFlow>
+                    </HBox>
+                </bottom>
             </Panel>
 
 

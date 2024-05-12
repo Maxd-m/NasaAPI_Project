@@ -1,19 +1,23 @@
 package com.example.prueba_apod.reports;
 
+import com.example.prueba_apod.models.APOD;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.layout.ColumnDocumentRenderer;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class ReportAPOD {
-    public void createReport(String dest) throws IOException {
+    public void createReport(String dest, List<APOD> apodList) throws IOException {
         //Initialize PDF writer
         PdfWriter writer = new PdfWriter(dest);
         PageSize ps = PageSize.A4;
@@ -35,21 +39,30 @@ public class ReportAPOD {
                 new Rectangle(offSet + columnWidth, offSet, columnWidth, columnHeight),
                 new Rectangle(offSet + columnWidth * 2 + 5, offSet, columnWidth, columnHeight)};
         document.setRenderer(new ColumnDocumentRenderer(document, columns));
+        /*
+        * for (int i = 0; i < apodList.size(); i++) {
+           Image image = new Image(ImageDataFactory.create(apodList.get(i).getUrl())).setWidth(columnWidth);
+           // Image apple = new Image(ImageDataFactory.create(APPLE_IMG)).setWidth(columnWidth);
 
-        for (int i = 0; i < 28; i++) {
             ReportAPOD.addArticle(document,"Prueba de pruebas apod"+i,"BY sdlafkhluke","Imagen","aslkdfjgsdagfuklsd ldksafjhkjds falksdjfbjklnds lksadfjhkldsa flkjdbslkjas");
 
+        }
+        * */
+
+        for (APOD element : apodList){
+            Image img = new Image(ImageDataFactory.create(element.getUrl())).setWidth(columnWidth);
+            ReportAPOD.addArticle(document,element.getTitle(),"Date: "+element.getDate()+" Copyright: "+element.getCopyright(),img,element.getExplanation());
         }
 
         document.close();
 
     }
-    public static void addArticle(Document doc, String title, String author,String image, String text) throws IOException {
+    public static void addArticle(Document doc, String title, String author,Image image, String text) throws IOException {
         Paragraph p1 = new Paragraph(title)
 
                 .setFontSize(14);
         doc.add(p1);
-        //doc.add(image);
+        doc.add(image);
         Paragraph p2 = new Paragraph()
 
                 .setFontSize(7)

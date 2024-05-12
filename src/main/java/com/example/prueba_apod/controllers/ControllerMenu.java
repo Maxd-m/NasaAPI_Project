@@ -22,8 +22,6 @@ public class ControllerMenu implements Initializable {
     @FXML
     private Button btnAPOD;
     @FXML
-    private RadioButton btnUser;
-    @FXML
     private Panel mainPanel;
     @FXML
     private VBox rootVbox;
@@ -116,7 +114,6 @@ public class ControllerMenu implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        btnUser.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
        // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
        // VBox.setVgrow(mainPanel, Priority.ALWAYS);

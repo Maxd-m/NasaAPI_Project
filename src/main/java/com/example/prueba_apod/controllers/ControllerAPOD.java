@@ -2,6 +2,7 @@ package com.example.prueba_apod.controllers;
 
 import com.example.prueba_apod.models.APOD;
 import com.example.prueba_apod.reports.ReportAPOD;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,8 @@ import java.time.LocalDate;
 
 import com.google.gson.Gson;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.scene.layout.Panel;
@@ -51,7 +54,7 @@ public class ControllerAPOD implements Initializable {
     @FXML
     private Panel mainPanel;
     @FXML
-    private Label loadingLabel;
+    private Text msgTitle, msgContent;
     @FXML
     private Button btnBack;
     @FXML
@@ -60,6 +63,8 @@ public class ControllerAPOD implements Initializable {
     private Button btnSave;
     @FXML
     private Button btnReport;
+    @FXML
+    private TextFlow msgContainer;
 
     private APOD apod;
 
@@ -76,6 +81,23 @@ public class ControllerAPOD implements Initializable {
         webView.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
 
+        try {
+            if(!isOnline()){
+                Platform.runLater(()->{
+                    msgContainer.getStyleClass().add("alert-warning");
+                    msgTitle.setText("No internet! ");
+                    msgContent.setText("Check your internet connection and try again.");
+                    searchBtn.setDisable(true);
+                    btnReport.setDisable(true);
+                    btnSave.setDisable(true);
+                    datePicker.setDisable(true);
+                });
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
         // Scene sc = new Scene(new VBox());
@@ -84,118 +106,100 @@ public class ControllerAPOD implements Initializable {
     }
 
     @FXML
-    protected void onSearchButtonClick() throws IOException {
+    protected void onSearchButtonClick() throws IOException, InterruptedException {
 
         //iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9
         //DEMO_KEY
         //video= 2024-04-14
         //imagen 2024-01-01
+        
+       // if(isOnline()){
+            new Thread(()->{
+                searchBtn.setDisable(true);
+                btnBack.setDisable(true);
+                try {
+                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date=" + datePicker.getValue().toString());
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("GET");
+                    conn.connect();
 
-        searchBtn.setDisable(true);
+                    int responseCode = conn.getResponseCode();
+                    if(responseCode!=200&&responseCode!=429){
+                        throw new RuntimeException("Error "+responseCode);
+                    }else{
+                        //abrir scanner para leer datos:
+                        StringBuilder infoString = new StringBuilder();
+                        Scanner scanner = null;
+                        scanner = new Scanner(url.openStream());
 
-        URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+datePicker.getValue().toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.connect();
+                        while (scanner.hasNext()){
+                            infoString.append(scanner.nextLine());
+                        }
 
-        int responseCode = conn.getResponseCode();
-        if(responseCode!=200&&responseCode!=429){
-            throw new RuntimeException("Error "+responseCode);
-        }else{
-            //abrir scanner para leer datos:
-            StringBuilder infoString = new StringBuilder();
-            Scanner scanner = new Scanner(url.openStream());
-
-            while (scanner.hasNext()){
-                infoString.append(scanner.nextLine());
-            }
-
-            scanner.close();
-
-            //imprimir info
-            System.out.println(infoString);
-            Gson gson = new Gson();
-            String aux= String.valueOf(infoString);
-            apod = gson.fromJson(aux,APOD.class);
-
-            /*
-            * try {
-                // Obtener la URL de la imagen de la API
-                String imageUrl = apod.getUrl();
-                System.out.println(imageUrl);
-
-                // Crear un objeto URL a partir de la URL de la imagen
-                URL imageURL = new URL(imageUrl);
-
-                // Descargar la imagen desde la URL
-                Image auxImage = new Image(imageURL.openStream());
-
-                // Crear un ImageView con la imagen descargada
-                ImageView imageView = new ImageView(auxImage);
+                        scanner.close();
 
 
-                // Agregar el ImageView al VBox
-                mainVbox.getChildren().add(imageView);
+                        //imprimir info
+                        System.out.println(infoString);
+                        Gson gson = new Gson();
+                        String aux= String.valueOf(infoString);
+                        apod = gson.fromJson(aux,APOD.class);
 
-                // Actualizar el texto de bienvenida
-                welcomeText.setText("Imagen cargada correctamente");
-            } catch (MalformedURLException e) {
-                System.err.println("Error al crear la URL de la imagen: " + e.getMessage());
-            } catch (IOException e) {
-                System.err.println("Error al descargar la imagen: " + e.getMessage());
-            }
-            * */
+                        if(apod.getMedia_type().equals(new String("image"))){
+                            image.setVisible(true);
+                            webView.setVisible(false);
+                            Image auxImage=new Image(apod.getUrl());
 
-            if(apod.getMedia_type().equals(new String("image"))){
-                image.setVisible(true);
-                webView.setVisible(false);
-                Image auxImage=new Image(apod.getUrl());
+                            //image=new ImageView(auxImage);
+                            image.setImage(auxImage);
+                            image.setFitWidth(300); // Ajusta el ancho según sea necesario
+                            image.setPreserveRatio(true);
 
-                //image=new ImageView(auxImage);
-                image.setImage(auxImage);
-                image.setFitWidth(300); // Ajusta el ancho según sea necesario
-                image.setPreserveRatio(true);
+                            //mainVbox.getChildren().add(image);
+                            System.out.println("after image");
+                        }
+                        else if (apod.getMedia_type().equals(new String("video"))) {
+                            image.setVisible(false);
+                            // WebView wb = new WebView();
+                            webView.setVisible(true);
+                            webView.getEngine().load(apod.getUrl());
+                            //webView.setPrefSize(640,360);
+                            System.out.println("after video");
+                            //mainVbox.getChildren().add(wb);
+                        }
 
-                //mainVbox.getChildren().add(image);
-                System.out.println("after image");
-            }
-            else if (apod.getMedia_type().equals(new String("video"))) {
-                /*
-                *  Media media = new Media(apod.getUrl());
-               System.out.println(apod.getUrl());
-               MediaPlayer mp = new MediaPlayer(media);
-               mp.setAutoPlay(true);
-               mediaView.setMediaPlayer(mp);
-               //mediaView = new MediaView(mp);
+                        titleLabel.setText(apod.getTitle());
+                        contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
+                        searchBtn.setDisable(false);
+                        btnBack.setDisable(false);
 
-               mediaView.setFitWidth(200);
-               mediaView.setPreserveRatio(true);
-                * */
+                    }
 
-               //mainVbox.getChildren().add(mediaView);
+                }
+                catch (Exception e) {
+                    System.out.println("error: " +e.toString());}
+            }).start();
+       /* }
+        else{
+            new Thread(()->{
+                Platform.runLater(()->{
+                    msgContainer.getStyleClass().add("alert-warning");
+                    msgTitle.setText("No internet ");
+                    msgContent.setText("Check your internet connection and try again.");
+                });
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(()->{
+                    msgContainer.setVisible(false);
+                });
+            }).start();
 
-                image.setVisible(false);
-               // WebView wb = new WebView();
-                webView.setVisible(true);
-                webView.getEngine().load(apod.getUrl());
-                //webView.setPrefSize(640,360);
-                System.out.println("after video");
-                //mainVbox.getChildren().add(wb);
+            //loadingLabel.setText("NO Internet");
+        }*/
 
-
-            }
-
-
-            // auxImage=ImageIO;
-            //image=new ImageView()
-
-            titleLabel.setText(apod.getTitle());
-            contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
-            searchBtn.setDisable(false);
-
-            //sc.setCursor(Cursor.DEFAULT);
-
-        }
     }
 
     public void onDatePicked(ActionEvent actionEvent) {
@@ -232,6 +236,7 @@ public class ControllerAPOD implements Initializable {
             // Obtengo el controlador
             //InsertarServiciosController controlador = loader.getController();
             ControllerMenu controlador = loader.getController();
+            controlador.setUser(isUser);
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 
@@ -308,14 +313,20 @@ public class ControllerAPOD implements Initializable {
     }
 
     public void onReportButtonCLick(ActionEvent actionEvent) {
-        String dest = "reports/Report_APOD.pdf";
-        try {
-            getWeekImages();
-            new ReportAPOD().createReport(dest);
-            openFile(dest);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        new Thread(()->{
+            String dest = "reports/Report_APOD.pdf";
+            btnReport.setDisable(true);
+            btnBack.setDisable(true);
+            try {
+                getWeekImages();
+                new ReportAPOD().createReport(dest,getWeekImages());
+                openFile(dest);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            btnReport.setDisable(false);
+            btnBack.setDisable(false);
+        }).start();
     }
 
     private void openFile(String filename)
@@ -333,7 +344,7 @@ public class ControllerAPOD implements Initializable {
     private List<APOD> getWeekImages() throws Exception{
         List<APOD> apodList = new ArrayList<>();
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; apodList.size() < 7; i++) {
          //   week.add(LocalDate.now().minusDays(i));
 
             //colocar codigo dentro de un ciclo para obtener apods de todas las fechas de week
@@ -358,17 +369,28 @@ public class ControllerAPOD implements Initializable {
                 scanner.close();
 
                 //imprimir info
-                System.out.println(infoString);
+               // System.out.println(infoString);
                 Gson gson = new Gson();
                 String aux = String.valueOf(infoString);
                 apod = gson.fromJson(aux, APOD.class);
-                apodList.add(apod);
+
+
+                if(apod.getMedia_type().equals(new String("image"))){
+                    System.out.println("image days: " +LocalDate.now().minusDays(i).toString());
+                    apodList.add(apod);
+                }
             }
 
             //System.out.println(LocalDate.now().minusDays(i));
-
+            System.out.println("size: "+apodList.size());
         }
         
         return apodList;
+    }
+
+    private boolean isOnline() throws IOException, InterruptedException {
+        //test connection to api.nasa.gov
+        String comand="ping -c 1 api.nasa.gov";
+        return (Runtime.getRuntime().exec(comand).waitFor()==0);
     }
 }

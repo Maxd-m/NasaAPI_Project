@@ -63,8 +63,8 @@ public class InnitController implements Initializable{
         }catch(Exception e){
             System.out.println(e.toString());
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error de conexion");
-            alert.setContentText("Hubo un error de comunicacion con la base de datos\nPor favor reintenta");
+            alert.setTitle("Connexion error");
+            alert.setContentText("There was a communication error with the database\nPlease try again");
             alert.show();
         }
         return ban;
@@ -103,8 +103,8 @@ public class InnitController implements Initializable{
                     }
                 }else{
                     Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error de inicio de sesion");
-                    alert.setContentText("Usuario/Contraseña incorrecto(s)\nPor favor verificalos y reintenta");
+                    alert.setTitle("Login error");
+                    alert.setContentText("User/Password incorrect\nPlease verify and try again");
                     alert.show();
                 }
 
@@ -113,8 +113,8 @@ public class InnitController implements Initializable{
             }
         }else{
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Llena todos los datos");
-            alert.setContentText("Falta llenar algunos datos!\nPor favor verificalos y reintenta");
+            alert.setTitle("Complete all fields");
+            alert.setContentText("There are empty fields!\nPlease verify and try again");
             alert.show();
         }
     }

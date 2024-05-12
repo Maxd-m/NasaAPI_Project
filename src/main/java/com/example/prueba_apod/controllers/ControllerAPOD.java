@@ -81,7 +81,8 @@ public class ControllerAPOD implements Initializable {
         webView.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
 
-        try {
+        /*
+        * try {
             if(!isOnline()){
                 Platform.runLater(()->{
                     msgContainer.getStyleClass().add("alert-warning");
@@ -98,6 +99,8 @@ public class ControllerAPOD implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        * */
+
 
 
         // Scene sc = new Scene(new VBox());
@@ -115,8 +118,11 @@ public class ControllerAPOD implements Initializable {
         
        // if(isOnline()){
             new Thread(()->{
-                searchBtn.setDisable(true);
-                btnBack.setDisable(true);
+                Platform.runLater(()->{
+                    searchBtn.setDisable(true);
+                    btnBack.setDisable(true);
+                });
+
                 try {
                     URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date=" + datePicker.getValue().toString());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -146,32 +152,41 @@ public class ControllerAPOD implements Initializable {
                         apod = gson.fromJson(aux,APOD.class);
 
                         if(apod.getMedia_type().equals(new String("image"))){
-                            image.setVisible(true);
-                            webView.setVisible(false);
-                            Image auxImage=new Image(apod.getUrl());
+                            Platform.runLater(()->{
+                                image.setVisible(true);
+                                webView.setVisible(false);
+                                Image auxImage=new Image(apod.getUrl());
 
-                            //image=new ImageView(auxImage);
-                            image.setImage(auxImage);
-                            image.setFitWidth(300); // Ajusta el ancho según sea necesario
-                            image.setPreserveRatio(true);
+                                //image=new ImageView(auxImage);
+                                image.setImage(auxImage);
+                                image.setFitWidth(300); // Ajusta el ancho según sea necesario
+                                image.setPreserveRatio(true);
+
+                            });
 
                             //mainVbox.getChildren().add(image);
                             System.out.println("after image");
                         }
                         else if (apod.getMedia_type().equals(new String("video"))) {
-                            image.setVisible(false);
-                            // WebView wb = new WebView();
-                            webView.setVisible(true);
-                            webView.getEngine().load(apod.getUrl());
-                            //webView.setPrefSize(640,360);
-                            System.out.println("after video");
-                            //mainVbox.getChildren().add(wb);
+                            Platform.runLater(()->{
+                                image.setVisible(false);
+                                // WebView wb = new WebView();
+                                webView.setVisible(true);
+                                webView.getEngine().load(apod.getUrl());
+                                //webView.setPrefSize(640,360);
+                                System.out.println("after video");
+                                //mainVbox.getChildren().add(wb);
+                            });
+
                         }
 
-                        titleLabel.setText(apod.getTitle());
-                        contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
-                        searchBtn.setDisable(false);
-                        btnBack.setDisable(false);
+                        Platform.runLater(()->{
+                            titleLabel.setText(apod.getTitle());
+                            contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
+                            searchBtn.setDisable(false);
+                            btnBack.setDisable(false);
+                        });
+
 
                     }
 
@@ -318,7 +333,7 @@ public class ControllerAPOD implements Initializable {
             btnReport.setDisable(true);
             btnBack.setDisable(true);
             try {
-                getWeekImages();
+                //getWeekImages();
                 new ReportAPOD().createReport(dest,getWeekImages());
                 openFile(dest);
             } catch (Exception e) {
@@ -390,7 +405,7 @@ public class ControllerAPOD implements Initializable {
 
     private boolean isOnline() throws IOException, InterruptedException {
         //test connection to api.nasa.gov
-        String comand="ping -c 1 api.nasa.gov";
+        String comand="ping -c 1 google.com";
         return (Runtime.getRuntime().exec(comand).waitFor()==0);
     }
 }

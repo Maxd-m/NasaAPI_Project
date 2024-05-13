@@ -22,6 +22,8 @@ public class ControllerMenu implements Initializable {
     @FXML
     private Button btnAPOD;
     @FXML
+    private Button btnImageVideoLib;
+    @FXML
     private Panel mainPanel;
     @FXML
     private VBox rootVbox;
@@ -97,7 +99,26 @@ public class ControllerMenu implements Initializable {
     }
 
     @FXML
-    public void onImgVidLibButtonCLick(ActionEvent actionEvent) {
+    public void onImgVidLibButtonCLick(ActionEvent actionEvent)
+    {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/IVL.fxml"));
+
+            Parent root = loader.load();
+
+            ControllerIVL controlador = loader.getController();
+            controlador.setUser(isUser);
+
+            System.out.println(isUser);
+
+            VBox currentRoot = (VBox) this.btnImageVideoLib.getScene().getRoot();
+
+            currentRoot.getChildren().setAll(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerIVL.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

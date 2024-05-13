@@ -21,8 +21,9 @@ module com.example.prueba_apod {
     requires java.annotation;
 
     opens com.example.prueba_apod to javafx.fxml;
-    opens com.example.prueba_apod.models to com.google.gson;
+    //opens com.example.prueba_apod.models to com.google.gson;
     exports com.example.prueba_apod;
     exports com.example.prueba_apod.controllers;
+    opens com.example.prueba_apod.models;
     opens com.example.prueba_apod.controllers to javafx.fxml;
 }

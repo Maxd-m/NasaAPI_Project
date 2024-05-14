@@ -6,12 +6,14 @@ import com.google.gson.reflect.TypeToken;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,11 +26,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ControllerIVL
+public class ControllerIVL implements Initializable
 {
+    @FXML
+    private VBox ap;
     private boolean isUser;
     Example example;
     @FXML
@@ -37,6 +42,7 @@ public class ControllerIVL
     private Button btnBack;
     @FXML
     private GridPane gp;
+
     private org.apache.http.client.HttpClient client = HttpClients.custom().build();
     Gson gson = new Gson();
     @FXML
@@ -52,6 +58,14 @@ public class ControllerIVL
     @FXML
     protected void onReportButtonClick() {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+
+        // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
+        // VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }
     @FXML
     protected void onSearchButtonClick() throws IOException
@@ -176,53 +190,9 @@ public class ControllerIVL
             // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
 
-              /*
-              * // Creo la scene y el stage
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-
-            // Asocio el stage con el scene
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
-
-            // Indico que debe hacer al cerrar
-            //stage.setOnCloseRequest(e -> controlador.closeWindows());
-
-            // Ciero la ventana donde estoy
-            Stage myStage = (Stage) this.btnBack.getScene().getWindow();
-            myStage.close();
-              * */
-
-
         } catch (IOException ex) {
             Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-        /*
-        * FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
-        try {
-            Node view = loader.load();
-           // content.getChildren().setAll(view);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        * */
-
-        /*
-        * try {
-            root=FXMLLoader.load(HelloApplication.class.getResource("menu-view.fxml"));
-            stage=(Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            scene=new Scene(root);
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        * */
-
     }
 
 }

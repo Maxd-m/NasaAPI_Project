@@ -4,22 +4,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.media.MediaView?>
-<?import javafx.scene.web.WebView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.control.DatePicker?>
 <?import org.kordamp.bootstrapfx.scene.layout.Panel?>
-<?import org.kordamp.bootstrapfx.BootstrapFX?>
-
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TextField?>
-<?import com.sun.javafx.webkit.theme.RenderThemeImpl.FormSlider?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.GridPane?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.prueba_apod.controllers.ControllerIVL" alignment="TOP_CENTER"
@@ -31,7 +20,7 @@
   </ToolBar>
   <Panel fx:id="mainPanel" style="-fx-background-color: black" >
     <heading>
-        <Label style="-fx-text-fill: white" text="NASA Image and Video Library " styleClass="h3"/>
+      <Label style="-fx-text-fill: white" text="NASA Image and Video Library " styleClass="h3"/>
     </heading>
 
     <body>
@@ -52,6 +41,4 @@
     </body>
 
   </Panel>
-
-
 </VBox>

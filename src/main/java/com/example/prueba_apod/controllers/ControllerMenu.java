@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -113,8 +114,9 @@ public class ControllerMenu implements Initializable {
             System.out.println(isUser);
 
             VBox currentRoot = (VBox) this.btnImageVideoLib.getScene().getRoot();
-
+            currentRoot.setStyle("-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover");
             currentRoot.getChildren().setAll(root);
+            currentRoot.setAlignment(Pos.TOP_CENTER);
 
         } catch (IOException ex) {
             Logger.getLogger(ControllerIVL.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,6 +1,8 @@
 package com.example.prueba_apod.controllers;
 
+import com.example.prueba_apod.database.dao.DAOapod;
 import com.example.prueba_apod.models.APOD;
+import com.example.prueba_apod.models.User;
 import com.example.prueba_apod.reports.ReportAPOD;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -67,6 +69,7 @@ public class ControllerAPOD implements Initializable {
     private TextFlow msgContainer;
 
     private APOD apod;
+    private User currentUser = new User();
 
     private Stage stage;
     private Scene scene;
@@ -80,6 +83,14 @@ public class ControllerAPOD implements Initializable {
         datePicker.setValue(LocalDate.now());
         webView.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
+        //ActionEvent ae= new ActionEvent();
+        try {
+            onSearchButtonClick(new ActionEvent());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         /*
         * try {
@@ -108,8 +119,8 @@ public class ControllerAPOD implements Initializable {
         //sc.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
     }
 
-    @FXML
-    protected void onSearchButtonClick() throws IOException, InterruptedException {
+
+    public void onSearchButtonClick(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         //iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9
         //DEMO_KEY
@@ -117,10 +128,16 @@ public class ControllerAPOD implements Initializable {
         //imagen 2024-01-01
         
        // if(isOnline()){
+
             new Thread(()->{
                 Platform.runLater(()->{
                     searchBtn.setDisable(true);
                     btnBack.setDisable(true);
+                    btnSave.setDisable(true);
+                    msgContainer.setVisible(true);
+                    msgContainer.getStyleClass().add("alert-warning");
+                    msgTitle.setText("Loading ");
+                    msgContent.setText("Please wait");
                 });
 
                 try {
@@ -185,6 +202,8 @@ public class ControllerAPOD implements Initializable {
                             contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
                             searchBtn.setDisable(false);
                             btnBack.setDisable(false);
+                            btnSave.setDisable(false);
+                            msgContainer.setVisible(false);
                         });
 
 
@@ -194,6 +213,7 @@ public class ControllerAPOD implements Initializable {
                 catch (Exception e) {
                     System.out.println("error: " +e.toString());}
             }).start();
+
        /* }
         else{
             new Thread(()->{
@@ -322,9 +342,45 @@ public class ControllerAPOD implements Initializable {
         }
     }
 
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+        System.out.println(this.currentUser.getId());
+    }
+
     @FXML
     public void onSaveButtonCLick(ActionEvent actionEvent) {
-        //Save JSON
+        new Thread(()->{
+            DAOapod dAPOD= new DAOapod();
+            Platform.runLater(()->{
+                btnSave.setDisable(true);
+                msgContainer.getStyleClass().add("alert-warning");
+                msgTitle.setText("Saving ");
+                msgContent.setText("Please wait");
+                msgContainer.setVisible(true);
+            });
+            if(dAPOD.save(apod,currentUser.getId())){
+                try {
+                    Platform.runLater(()->{
+                        msgContainer.getStyleClass().clear();
+                        msgContainer.getStyleClass().add("alert-success");
+                        msgTitle.setText("Success ");
+                        msgContent.setText("APOD saved");
+                        msgContainer.setVisible(true);
+                    });
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            Platform.runLater(()->{
+                msgContainer.setVisible(false);
+                btnSave.setDisable(false);
+            });
+        }).start();
     }
 
     public void onReportButtonCLick(ActionEvent actionEvent) {

@@ -1,5 +1,6 @@
 package com.example.prueba_apod.controllers;
 
+import com.example.prueba_apod.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +35,7 @@ public class ControllerMenu implements Initializable {
     private Scene scene;
     private Parent root;
     private boolean isUser;
+    private User currentUser =new User();
 
     @FXML
     public void onAPODButtonClick(ActionEvent actionEvent) {
@@ -50,6 +52,7 @@ public class ControllerMenu implements Initializable {
             //InsertarServiciosController controlador = loader.getController();
             ControllerAPOD controlador = loader.getController();
             controlador.setUser(isUser);
+            controlador.setCurrentUser(getCurrentUser());
 
              System.out.println(isUser);
 
@@ -133,6 +136,14 @@ public class ControllerMenu implements Initializable {
 
     public void setUser(boolean user) {
         isUser = user;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
     @Override

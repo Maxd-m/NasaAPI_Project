@@ -51,7 +51,7 @@
                             <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
                             <DatePicker fx:id="datePicker" onAction="#onDatePicked" editable="false" />
                             <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick">
-                                <tooltip><Tooltip text="Save APOD to database" styleClass="tooltip-info"/> </tooltip>
+                                <tooltip><Tooltip text="Save current APOD to database" styleClass="tooltip-info"/> </tooltip>
                             </Button>
                             <Button fx:id="btnReport" text="Report" styleClass="btn, btn-success" onAction="#onReportButtonCLick">
                                 <tooltip><Tooltip text="Generate PDF Report of last week images" styleClass="tooltip-success"/></tooltip>

@@ -30,6 +30,8 @@ public class InnitController implements Initializable{
     DAOUser userDao = new DAOUser();
     List<User> userList = new ArrayList<>();
 
+    User user=new User();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txtUser.setPromptText("User");
@@ -53,6 +55,7 @@ public class InnitController implements Initializable{
                 String passS = usuario.getPass();
                 String usertxt = txtUser.getText().trim();
                 String passtxt = txtPass.getText().trim();
+                user=usuario;
                 System.out.println(usertxt+"  "+passtxt);
                 System.out.println(userS+" "+passS);
 
@@ -92,6 +95,7 @@ public class InnitController implements Initializable{
                         // Obtengo el controlador
                         ControllerMenu controlador = loader.getController();
                         controlador.setUser(true);
+                        controlador.setCurrentUser(user);
 
                         VBox currentRoot = (VBox) btnInv.getScene().getRoot();
 

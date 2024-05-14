@@ -74,6 +74,8 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
         return false;
     }
 
+    public boolean save(Object record, int id){return false;}
+
     public List<User> findByName(String usuario) {
 
         List<User> usersList = FXCollections.observableArrayList();

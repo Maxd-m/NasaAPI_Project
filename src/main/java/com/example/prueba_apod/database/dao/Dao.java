@@ -15,4 +15,6 @@ public interface Dao<T,ID> {
     boolean update(Object record);
 
     boolean save(Object record);
+
+    boolean save(Object record, int id);
 }

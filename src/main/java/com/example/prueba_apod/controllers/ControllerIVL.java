@@ -13,6 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -21,12 +23,15 @@ import javafx.scene.web.WebView;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 
+import javax.swing.plaf.basic.BasicTreeUI;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,6 +75,7 @@ public class ControllerIVL implements Initializable
     @FXML
     protected void onSearchButtonClick() throws IOException
     {
+        gp.getChildren().clear();
         URL url= new URL("https://images-api.nasa.gov/search?q="+getsearch());
         client = HttpClients.custom().build();
         HttpGet request = new HttpGet(String.valueOf(url));
@@ -87,28 +93,29 @@ public class ControllerIVL implements Initializable
 
     protected void load(String json) throws MalformedURLException {
         example =gson.fromJson(json, new TypeToken<Example>(){}.getType());
-        System.out.println(example.getCollection().getItems().get(0).getHrefs().get(0));
         for (int i=0; i<5; i++)
         {
             WebView wb= new WebView();
-            wb.getEngine().load(example.getCollection().getItems().get(i).getHrefs().get(2));
+            System.out.println(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(2)));
+            wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(2)));
             changeStyle(wb);
-            gp.add(wb, i, 0);
             wb.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) ->
             {
-                Node node=event.getPickResult().getIntersectedNode();
-                Integer col=GridPane.getColumnIndex(node);
-                Integer row=GridPane.getRowIndex(node);
-                getDetails(node, col);
-                node.setScaleZ(1);
+                WebView wbb= (WebView) event.getPickResult().getIntersectedNode();
+                wbb.getEngine().reload();
+                Integer col=GridPane.getColumnIndex(wbb);
+                Integer row=GridPane.getRowIndex(wbb);
+                getDetails(wbb, col);
+                wbb.setDisable(true);
             });
+            gp.add(wb, i, 0);
         }
     }
 
-    protected void getDetails(Node node, int index)
+    protected void getDetails(WebView wb, int index)
     {
         gp.getChildren().clear();
-        gp.add(node, 0,0);
+        gp.add(wb, 0,0);
         gp.add(createlabel(index), 1,0);
     }
     protected Label createlabel(int index)
@@ -124,8 +131,8 @@ public class ControllerIVL implements Initializable
             keywords=keywords+", "+example.getCollection().getItems().get(index).getData().get(0).getKeywords().get(i);
         }
         String secondary=example.getCollection().getItems().get(index).getData().get(0).getPhotographer();
-        Label label=new Label(title
-                +"\n"+id+"\n\n"+description+"\n"+data+"\n"+center+"\n"+keywords);
+        Label label=new Label("Titulo: "+title
+                +"\nNASA ID: "+id+"\n\nDescripcion: "+description+"\nFecha: "+data+"\nCentro: "+center+"\nKeywords: "+keywords);
         label.setStyle("-fx-text-fill: white");
         label.setWrapText(true);
         label.setMinHeight(100);
@@ -136,6 +143,11 @@ public class ControllerIVL implements Initializable
     protected String getsearch()
     {
         String var=input_search.getText();
+        var=var.replaceAll(" ", "%20");
+        return var;
+    }
+    protected String modifyurl(String var)
+    {
         var=var.replaceAll(" ", "%20");
         return var;
     }

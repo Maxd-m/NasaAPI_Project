@@ -56,7 +56,7 @@ public class Item {
     public List<String> getHrefs() throws MalformedURLException {
         org.apache.http.client.HttpClient client = HttpClients.custom().build();
         Gson gson = new Gson();
-        URL url= new URL(getHref());
+        URL url= new URL(modifyurl(getHref()));
         client = HttpClients.custom().build();
         HttpGet request = new HttpGet(String.valueOf(url));
         org.apache.http.HttpResponse response = null;
@@ -70,5 +70,11 @@ public class Item {
         }
         List<String>hrefs=gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
         return hrefs;
+    }
+
+    protected String modifyurl(String var)
+    {
+        var=var.replaceAll(" ", "%20");
+        return var;
     }
 }

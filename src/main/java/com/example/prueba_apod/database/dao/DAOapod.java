@@ -1,11 +1,10 @@
 package com.example.prueba_apod.database.dao;
 
 import com.example.prueba_apod.models.APOD;
+import com.example.prueba_apod.models.APODkey;
+import javafx.collections.FXCollections;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,5 +137,61 @@ public class DAOapod implements Dao<APOD,Integer> {
 
         }
         return false;
+    }
+
+    public boolean saveKey(String key){
+        String query = "insert into APODkeys " +
+                " (apodKey)" +
+                " values (?)";
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            // ps.setInt(1, auto.getIdAuto());
+            ps.setString(1,key);
+            /*
+            * ps.setString(1, auto.getNombreMarca());
+            ps.setString(2, auto.getModelo());
+            ps.setString(3, auto.getColor());
+            ps.setInt(4, auto.getPeso());
+            ps.setString(5, auto.getTipoTransmision());
+            ps.setInt(6,auto.getNumPuertas());
+            ps.setString(7,auto.getNumPasajeros());
+            ps.setString(8,auto.getMotor());
+            ps.setString(9,auto.getTipoFrenos());
+            ps.setInt(10,auto.getVelocidades());
+            ps.setString(11,auto.getOtrosAccesorios());
+            ps.setString(12,auto.getFotografia());
+            ps.setDouble(13,auto.getPrecio());
+            //ps.setFloat(13,auto.getPrecio());
+            * */
+
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<String> findAllKeys(){
+        List<String> keysList = FXCollections.observableArrayList();
+        String query = "select * from APODkeys";
+        try {
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next())
+            {
+                APODkey dkey = new APODkey();
+                dkey.setId(rs.getInt("id"));
+                dkey.setKey(rs.getString("apodKey"));
+
+                keysList.add(dkey.getKey());
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return keysList;
     }
 }

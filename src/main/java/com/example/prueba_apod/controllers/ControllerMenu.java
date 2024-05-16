@@ -1,6 +1,10 @@
 package com.example.prueba_apod.controllers;
 
+import com.example.prueba_apod.database.dao.DAOapod;
 import com.example.prueba_apod.models.User;
+import com.example.prueba_apod.reports.ReportUsers;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,9 +12,11 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.scene.layout.Panel;
 
@@ -29,13 +35,21 @@ public class ControllerMenu implements Initializable {
     private Panel mainPanel;
     @FXML
     private VBox rootVbox;
+    @FXML
+    private Button btnAdmin;
+
 
 
     private Stage stage;
     private Scene scene;
     private Parent root;
     private boolean isUser;
+    private boolean isAdmin;
     private User currentUser =new User();
+    private String tipo;
+    private String key="DEMO_KEY";
+    private Button report;
+
 
     @FXML
     public void onAPODButtonClick(ActionEvent actionEvent) {
@@ -53,6 +67,8 @@ public class ControllerMenu implements Initializable {
             ControllerAPOD controlador = loader.getController();
             controlador.setUser(isUser);
             controlador.setCurrentUser(getCurrentUser());
+            controlador.setKey(getKey());
+            controlador.setAdmin(isAdmin);
 
              System.out.println(isUser);
 
@@ -149,6 +165,7 @@ public class ControllerMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         mainPanel.getStyleClass().add("panel-default");
+        btnAdmin.setVisible(false);
        // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
        // VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }
@@ -179,5 +196,118 @@ public class ControllerMenu implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void recibirTipo(String user) {
+        if(user != null){
+            tipo = "1";
+            if(user.equals("1")){
+                btnAdmin.setVisible(true);
+                setAdmin(true);
+            }
+            //una vez validado puedes agregar el boton aqui para las acciones del administrador
+            System.out.println(tipo+" si es *1* es admin");
+        }else{
+            setAdmin(false);
+            System.out.println("no es admin");
+        }
+    }
+
+    public void onAdminButtonCLick(ActionEvent actionEvent) {
+        Stage modalStage = new Stage();
+        Stage currentStage = (Stage) btnAdmin.getScene().getWindow();
+        modalStage.initModality(Modality.APPLICATION_MODAL);
+        modalStage.initOwner(currentStage);
+        modalStage.setTitle("Admin Options");
+
+        VBox mainVbox=new VBox(15);
+
+        HBox content = new HBox(20);
+
+        VBox lftVbox=new VBox(5);
+        ComboBox<String> keys = new ComboBox<>(FXCollections.observableArrayList(new DAOapod().findAllKeys()));
+        keys.getSelectionModel().selectFirst();
+        //keys.prefWidth(35);
+        Label labelCB = new Label("Set Key");
+        lftVbox.getChildren().addAll(labelCB,keys);
+
+        VBox rgtVbox=new VBox();
+        rgtVbox.setPrefWidth(280);
+        Label labelSV = new Label("Save a new key");
+        TextField newKey = new TextField();
+        //newKey.prefWidth(60);
+        //newKey.setPrefWidth(160);
+        Button btnSave = new Button("Save");
+        VBox btn1=new VBox(btnSave);
+        btn1.setAlignment(Pos.CENTER);
+        btnSave.setAlignment(Pos.CENTER);
+        btnSave.setOnAction(event->{
+            saveKey(newKey.getText());
+            keys.setItems(FXCollections.observableArrayList(new DAOapod().findAllKeys()));
+        });
+
+        rgtVbox.getChildren().addAll(labelSV,newKey,btn1);
+
+
+        report = new Button("Generate Report");
+        report.setOnAction(event->onReportButtonClick());
+        report.setTooltip(new Tooltip("Generate report of registered users"));
+        VBox btn2=new VBox(report);
+        btn2.setAlignment(Pos.CENTER);
+
+        content.getChildren().addAll(lftVbox,rgtVbox);
+        content.setAlignment(Pos.CENTER);
+
+
+        mainVbox.getChildren().addAll(content,btn2);
+
+        modalStage.setOnCloseRequest(event -> onAdminCLosed(modalStage,keys.getSelectionModel().getSelectedItem()));
+
+        StackPane modalRoot = new StackPane();
+        modalRoot.getChildren().addAll(mainVbox);
+        modalStage.setScene(new Scene(modalRoot, 600, 150));
+        modalStage.showAndWait();
+
+    }
+
+    private void onReportButtonClick(){
+        String dest="reports/Report_Users.pdf";
+        new Thread(()->{
+            try {
+                Platform.runLater(()->{report.setDisable(true);});
+                new ReportUsers().createPdf(dest);
+                Platform.runLater(()->{report.setDisable(false);});
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
+
+    private boolean saveKey(String key){
+        if(new DAOapod().saveKey(key)){
+            return true;
+        }else{return false;}
+    }
+
+    private void onAdminCLosed(Stage st,String selKey){
+        setKey(selKey);
+        st.close();
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+        btnAdmin.setVisible(admin);
     }
 }

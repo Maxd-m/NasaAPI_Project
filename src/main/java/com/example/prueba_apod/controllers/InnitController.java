@@ -96,6 +96,7 @@ public class InnitController implements Initializable{
                         ControllerMenu controlador = loader.getController();
                         controlador.setUser(true);
                         controlador.setCurrentUser(user);
+                        controlador.recibirTipo(userList.get(0).getCveAdmin());
 
                         VBox currentRoot = (VBox) btnInv.getScene().getRoot();
 

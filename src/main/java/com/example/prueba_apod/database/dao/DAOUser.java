@@ -46,9 +46,10 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
                 a.setName(rs.getString("name"));
                 a.setPass(rs.getString("password"));
                 a.setMail(rs.getString("mail"));
-                a.setGender(rs.getString("gender"));
+                a.setGender(rs.getString("cveGen"));
                 a.setAge(rs.getInt("age"));
                 a.setUser(rs.getString("user"));
+                //a.setCveAdmin(rs.getString("cveAdmin"));
                 usersList.add(a);
                 a = null;
             }
@@ -92,6 +93,7 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
                 a.setGender(rs.getString("cveGen"));
                 a.setAge(rs.getInt("age"));
                 a.setUser(rs.getString("user"));
+                a.setCveAdmin(rs.getString("cveAdmin"));
                 usersList.add(a);
                 a = null;
             }

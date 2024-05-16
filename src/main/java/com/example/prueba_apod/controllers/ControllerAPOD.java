@@ -75,7 +75,9 @@ public class ControllerAPOD implements Initializable {
     private Scene scene;
     private Parent root;
     private boolean isUser;
+    private boolean isAdmin;
     private boolean flgLoading;
+    private String key;
 
 
     @Override
@@ -128,7 +130,7 @@ public class ControllerAPOD implements Initializable {
         //imagen 2024-01-01
         
        // if(isOnline()){
-
+        System.out.println(key);
             new Thread(()->{
                 Platform.runLater(()->{
                     searchBtn.setDisable(true);
@@ -141,7 +143,7 @@ public class ControllerAPOD implements Initializable {
                 });
 
                 try {
-                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date=" + datePicker.getValue().toString());
+                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
@@ -272,6 +274,7 @@ public class ControllerAPOD implements Initializable {
             //InsertarServiciosController controlador = loader.getController();
             ControllerMenu controlador = loader.getController();
             controlador.setUser(isUser);
+            controlador.setAdmin(isAdmin);
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 
@@ -344,6 +347,14 @@ public class ControllerAPOD implements Initializable {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public void setCurrentUser(User currentUser) {
@@ -463,5 +474,13 @@ public class ControllerAPOD implements Initializable {
         //test connection to api.nasa.gov
         String comand="ping -c 1 google.com";
         return (Runtime.getRuntime().exec(comand).waitFor()==0);
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 }

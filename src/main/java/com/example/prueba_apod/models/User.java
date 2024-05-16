@@ -2,7 +2,7 @@ package com.example.prueba_apod.models;
 
 public class User {
     private int id,age;
-    private String name,pass,mail,gender,user;
+    private String name,pass,mail,gender,user,cveAdmin;
 
     public User() {
     }
@@ -70,6 +70,14 @@ public class User {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getCveAdmin() {
+        return cveAdmin;
+    }
+
+    public void setCveAdmin(String cveAdmin) {
+        this.cveAdmin = cveAdmin;
     }
 
     @Override

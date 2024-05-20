@@ -96,8 +96,15 @@ public class ControllerIVL implements Initializable
         for (int i=0; i<5; i++)
         {
             WebView wb= new WebView();
-            System.out.println(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(2)));
-            wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(2)));
+            if(!example.getCollection().getItems().get(i).getData().get(0).getMediaType().equals("image"))
+            {
+                wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(
+                        example.getCollection().getItems().get(i).getHrefs().size()-2
+                )));
+            }
+            else {
+                wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(0)));
+            }
             changeStyle(wb);
             wb.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) ->
             {
@@ -105,15 +112,22 @@ public class ControllerIVL implements Initializable
                 wbb.getEngine().reload();
                 Integer col=GridPane.getColumnIndex(wbb);
                 Integer row=GridPane.getRowIndex(wbb);
-                getDetails(wbb, col);
+                try {
+                    getDetails(wbb, col);
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                }
                 wbb.setDisable(true);
             });
             gp.add(wb, i, 0);
         }
     }
 
-    protected void getDetails(WebView wb, int index)
-    {
+    protected void getDetails(WebView wb, int index) throws MalformedURLException {
+        if(example.getCollection().getItems().get(index).getData().get(0).getMediaType().equals("video"))
+        {
+            wb.getEngine().load(modifyurl(example.getCollection().getItems().get(index).getHrefs().get(2)));
+        }
         gp.getChildren().clear();
         gp.add(wb, 0,0);
         gp.add(createlabel(index), 1,0);

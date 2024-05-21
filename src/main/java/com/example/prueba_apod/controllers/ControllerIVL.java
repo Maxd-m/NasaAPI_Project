@@ -17,6 +17,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
@@ -35,10 +36,11 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ControllerIVL implements Initializable
+public class ControllerIVL
 {
     @FXML
     private VBox ap;
+    private int i=0, size=5;
     private boolean isUser;
     Example example;
     @FXML
@@ -46,13 +48,14 @@ public class ControllerIVL implements Initializable
     @FXML
     private Button btnBack;
     @FXML
+    private Button btnb;
+    @FXML
+    private Button btns;
+    @FXML
     private GridPane gp;
 
     private org.apache.http.client.HttpClient client = HttpClients.custom().build();
     Gson gson = new Gson();
-    @FXML
-    protected void onBackButtonClick() throws IOException {
-    }
     @FXML
     protected void onDatePicked() {
     }
@@ -63,14 +66,6 @@ public class ControllerIVL implements Initializable
     @FXML
     protected void onReportButtonClick() {
 
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
-
-        // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
-        // VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }
     @FXML
     protected void onSearchButtonClick() throws IOException
@@ -88,12 +83,20 @@ public class ControllerIVL implements Initializable
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        load(json);
+        example =gson.fromJson(json, new TypeToken<Example>(){}.getType());
+        load();
     }
 
-    protected void load(String json) throws MalformedURLException {
-        example =gson.fromJson(json, new TypeToken<Example>(){}.getType());
-        for (int i=0; i<5; i++)
+    protected void load() throws MalformedURLException {
+        if (size==5)
+        {
+            btnb.setDisable(true);
+        }
+        else if (size==example.getCollection().getItems().size())
+        {
+            btns.setDisable(true);
+        }
+        while (i<size)
         {
             WebView wb= new WebView();
             if(!example.getCollection().getItems().get(i).getData().get(0).getMediaType().equals("image"))
@@ -120,6 +123,7 @@ public class ControllerIVL implements Initializable
                 wbb.setDisable(true);
             });
             gp.add(wb, i, 0);
+            i++;
         }
     }
 
@@ -142,7 +146,7 @@ public class ControllerIVL implements Initializable
         String keywords=example.getCollection().getItems().get(index).getData().get(0).getKeywords().get(0);
         for (int i=1; i<example.getCollection().getItems().get(index).getData().get(0).getKeywords().size(); i++)
         {
-            keywords=keywords+", "+example.getCollection().getItems().get(index).getData().get(0).getKeywords().get(i);
+            keywords=keywords + ", "+example.getCollection().getItems().get(index).getData().get(0).getKeywords().get(i);
         }
         String secondary=example.getCollection().getItems().get(index).getData().get(0).getPhotographer();
         Label label=new Label("Titulo: "+title
@@ -212,13 +216,46 @@ public class ControllerIVL implements Initializable
             controlador.setUser(isUser);
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
-
+            currentRoot.setStyle("-fx-background-image: null");
             // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
 
         } catch (IOException ex) {
             Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    @FXML
+    public void onBButtonClick(ActionEvent actionEvent) throws MalformedURLException
+    {
+        if (size==example.getCollection().getItems().size())
+        {
+            size=size-(size%5);
+            i=i-(size%5)-5;
+        }
+        else
+        {
+            size=i-5;
+            i=i-10;
+        }
+
+        gp.getChildren().clear();
+        load();
+    }
+
+    @FXML
+    public void onSButtonClick(ActionEvent actionEvent) throws MalformedURLException
+    {
+        if (i+5<example.getCollection().getItems().size())
+        {
+            size=i+5;
+        }
+        else
+        {
+            size=example.getCollection().getItems().size();
+        }
+        btnb.setDisable(false);
+        gp.getChildren().clear();
+        load();
     }
 
 }

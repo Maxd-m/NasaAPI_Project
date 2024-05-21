@@ -10,6 +10,8 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Text?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.prueba_apod.controllers.ControllerIVL" alignment="TOP_CENTER"
       style="-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover">
@@ -18,7 +20,7 @@
       <tooltip><Tooltip text="Go back to menu"/></tooltip>
     </Button>
   </ToolBar>
-  <Panel fx:id="mainPanel" style="-fx-background-color: black" >
+  <Panel fx:id="mainPanel" style="-fx-background-color: black">
     <heading>
       <Label style="-fx-text-fill: white" text="NASA Image and Video Library " styleClass="h3"/>
     </heading>
@@ -36,7 +38,18 @@
         </HBox>
         <GridPane style="-fx-background-color: black" fx:id="gp" alignment="CENTER" hgap="10" vgap="10">
         </GridPane>
-
+        <HBox alignment="CENTER" spacing="30" fx:id="paginado" style="-fx-background-color: white">
+          <Button fx:id="btnb" text="Back" alignment="CENTER" styleClass="btn,btn-default, btn-l" onAction="#onBButtonClick">
+            <graphic>
+              <FontIcon iconLiteral="fas-arrow-alt-circle-left" iconSize="20" iconColor="black"/>
+            </graphic>
+          </Button>
+          <Button fx:id="btns" text="Next" alignment="CENTER" styleClass="btn,btn-default, btn-l" onAction="#onSButtonClick">
+            <graphic>
+              <FontIcon iconLiteral="fas-arrow-alt-circle-right" iconSize="20" iconColor="black"/>
+            </graphic>
+          </Button>
+        </HBox>
       </VBox>
     </body>
 

@@ -24,12 +24,12 @@ public class DAOapod implements Dao<APOD,Integer> {
     }
 
     @Override
-    public boolean delete(Object o) {
+    public boolean delete(Integer id) {
         return false;
     }
 
     @Override
-    public boolean update(Object record) {
+    public boolean update(APOD record) {
         return false;
     }
 

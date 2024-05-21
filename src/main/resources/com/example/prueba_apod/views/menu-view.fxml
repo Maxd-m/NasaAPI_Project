@@ -35,7 +35,8 @@
                 <Button fx:id="btnAPOD" text="APOD" styleClass="btn, btn-lg" onAction="#onAPODButtonClick"/>
                 <Button fx:id="btnImageVideoLib" text="NASA Image and Video Library" styleClass="btn, btn-lg" onAction="#onImgVidLibButtonCLick"/>
                 <Button fx:id="btnAsteroids" text="Asteroids NeoWs" styleClass="btn, btn-lg" onAction="#onAsteroidsButtonCLick"/>
-                <Button fx:id="btnAdmin" text="Admin Options" styleClass="btn, btn-lg" onAction="#onAdminButtonCLick"/>
+                <Button fx:id="btnAdmin" text="Manage keys" styleClass="btn, btn-lg" onAction="#onAdminButtonCLick"/>
+                <Button fx:id="btnUsers" text="Manage Users" styleClass="btn, btn-lg" onAction="#onUsersSettingsButtonClick"/>
             </VBox>
         </body>
     </Panel>

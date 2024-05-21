@@ -10,9 +10,9 @@ public interface Dao<T,ID> {
 
     List<T> findAll();
 
-    boolean delete(Object o);
+    boolean delete(ID id);
 
-    boolean update(Object record);
+    boolean update(T record);
 
     boolean save(Object record);
 

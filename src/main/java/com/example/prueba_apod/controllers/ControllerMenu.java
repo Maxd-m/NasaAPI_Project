@@ -37,6 +37,8 @@ public class ControllerMenu implements Initializable {
     private VBox rootVbox;
     @FXML
     private Button btnAdmin;
+    @FXML
+    private Button btnUsers;
 
 
 
@@ -45,10 +47,11 @@ public class ControllerMenu implements Initializable {
     private Parent root;
     private boolean isUser;
     private boolean isAdmin;
-    private User currentUser =new User();
+    private User currentUser;
     private String tipo;
     private String key="DEMO_KEY";
     private Button report;
+    private Button usersSettings;
 
 
     @FXML
@@ -249,17 +252,22 @@ public class ControllerMenu implements Initializable {
         rgtVbox.getChildren().addAll(labelSV,newKey,btn1);
 
 
-        report = new Button("Generate Report");
-        report.setOnAction(event->onReportButtonClick());
-        report.setTooltip(new Tooltip("Generate report of registered users"));
-        VBox btn2=new VBox(report);
-        btn2.setAlignment(Pos.CENTER);
+        //report = new Button("Generate Report");
+        //report.setOnAction(event->onReportButtonClick());
+        //report.setTooltip(new Tooltip("Generate report of registered users"));
+
+       // usersSettings=new Button("Manage users");
+        //usersSettings.setTooltip(new Tooltip("Update or Delete users"));
+       // usersSettings.setOnAction(actionEvent1 -> onUsersSettingsButtonClick(modalStage));
+
+       // HBox btn2=new HBox(report);
+       // btn2.setAlignment(Pos.CENTER);
 
         content.getChildren().addAll(lftVbox,rgtVbox);
         content.setAlignment(Pos.CENTER);
 
 
-        mainVbox.getChildren().addAll(content,btn2);
+        mainVbox.getChildren().addAll(content);
 
         modalStage.setOnCloseRequest(event -> onAdminCLosed(modalStage,keys.getSelectionModel().getSelectedItem()));
 
@@ -281,6 +289,39 @@ public class ControllerMenu implements Initializable {
                 throw new RuntimeException(e);
             }
         }).start();
+    }
+
+    @FXML
+    private void onUsersSettingsButtonClick(){
+        //st.close();
+        try {
+            // Cargo la vista
+            //st.close();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/usersSettings-view.fxml"));
+
+            System.out.println("user: "+getCurrentUser().getName());
+            // Cargo el padre
+            Parent root = loader.load();
+
+            // Obtengo el controlador
+            //InsertarServiciosController controlador = loader.getController();
+            ControllerUsersSettings controlador = loader.getController();
+            //controlador.setUser(isUser);
+
+            controlador.setCurrentUser(getCurrentUser());
+            //controlador.setKey(getKey());
+            //controlador.setAdmin(isAdmin);
+
+            //System.out.println(isUser);
+
+            VBox currentRoot = (VBox) this.btnAPOD.getScene().getRoot();
+
+            // Reemplazo el contenido del contenedor actual con el nuevo contenido
+            currentRoot.getChildren().setAll(root);
+
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private boolean saveKey(String key){
@@ -309,5 +350,6 @@ public class ControllerMenu implements Initializable {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
         btnAdmin.setVisible(admin);
+        btnUsers.setVisible(admin);
     }
 }

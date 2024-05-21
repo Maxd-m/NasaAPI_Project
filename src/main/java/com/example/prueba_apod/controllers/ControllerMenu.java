@@ -46,7 +46,7 @@ public class ControllerMenu implements Initializable {
     private Scene scene;
     private Parent root;
     private boolean isUser;
-    private boolean isAdmin;
+    private boolean isAdmin=false;
     private User currentUser;
     private String tipo;
     private String key="DEMO_KEY";
@@ -169,6 +169,7 @@ public class ControllerMenu implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         mainPanel.getStyleClass().add("panel-default");
         btnAdmin.setVisible(false);
+        btnUsers.setVisible(false);
        // mainPanel.setPrefHeight(mainPanel.getMaxHeight());
        // VBox.setVgrow(mainPanel, Priority.ALWAYS);
     }

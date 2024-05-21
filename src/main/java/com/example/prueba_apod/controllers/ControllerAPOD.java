@@ -359,7 +359,7 @@ public class ControllerAPOD implements Initializable {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-        System.out.println(this.currentUser.getId());
+        //System.out.println(this.currentUser.getId());
     }
 
     @FXML

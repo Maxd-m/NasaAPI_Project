@@ -114,7 +114,6 @@ public class ControllerIVL
                 WebView wbb= (WebView) event.getPickResult().getIntersectedNode();
                 wbb.getEngine().reload();
                 Integer col=GridPane.getColumnIndex(wbb);
-                Integer row=GridPane.getRowIndex(wbb);
                 try {
                     getDetails(wbb, col);
                 } catch (MalformedURLException e) {

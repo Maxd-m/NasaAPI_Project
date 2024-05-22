@@ -9,6 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,8 +38,8 @@ public class InnitController implements Initializable{
     public void initialize(URL url, ResourceBundle resourceBundle) {
         txtUser.setPromptText("User");
         txtPass.setPromptText("Password");
-        //Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("com/example/prueba_apod/images/nasa.png")),75,64,false,false);
-        //lblNasa.setGraphic(new ImageView(image));
+        Image image = new Image(InnitController.class.getResource("/nasa.png").toExternalForm());
+        lblNasa.setGraphic(new ImageView(image));
         lblNasa.setPrefSize(64,64);
         lblNasa.setMinSize(64,64);
         lblNasa.setMaxSize(64,64);

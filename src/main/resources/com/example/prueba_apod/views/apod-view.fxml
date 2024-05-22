@@ -21,6 +21,7 @@
 <?import javafx.scene.text.TextFlow?>
 <?import javafx.scene.text.Text?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
+      style="-fx-background-color: #000"
       fx:controller="com.example.prueba_apod.controllers.ControllerAPOD" alignment="CENTER">
 
 
@@ -31,7 +32,7 @@
                 </Button>
             </ToolBar>
 
-            <Panel fx:id="mainPanel">
+            <Panel fx:id="mainPanel" style="-fx-background-image: url('fondoe2.jpg'); -fx-background-size: cover">
                 <heading>
                     <HBox spacing="10">
                         <Label text="APOD " styleClass="h3"/>

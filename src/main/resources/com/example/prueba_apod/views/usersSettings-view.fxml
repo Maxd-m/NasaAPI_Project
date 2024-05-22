@@ -11,6 +11,7 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
+      style="-fx-background-color: #000"
       fx:controller="com.example.prueba_apod.controllers.ControllerUsersSettings"
       prefHeight="400.0" prefWidth="600.0" >
 
@@ -20,7 +21,7 @@
         </Button>
     </ToolBar>
 
-    <Panel styleClass="panel, panel-default">
+    <Panel styleClass="panel, panel-default" style="-fx-background-image: url('fondoe3.jpg'); -fx-background-size: cover">
 
         <heading>
             <HBox spacing="10">

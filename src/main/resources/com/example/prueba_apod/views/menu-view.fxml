@@ -10,6 +10,7 @@
 <?import javafx.geometry.Insets?>
 <VBox fx:id="rootVbox" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      style="-fx-background-color: #000"
       fx:controller="com.example.prueba_apod.controllers.ControllerMenu" alignment="CENTER" prefHeight="Infinity" prefWidth="Infinity">
 
     <ToolBar>
@@ -18,7 +19,7 @@
         </Button>
     </ToolBar>
 
-    <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS">
+    <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS" style="-fx-background-image: url('fondoe3.jpg'); -fx-background-size: cover">
         <heading>
             <HBox spacing="10">
                 <Label text="MENU " styleClass="h3"/>

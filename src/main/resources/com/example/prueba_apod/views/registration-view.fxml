@@ -9,6 +9,7 @@
 <?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
+      style="-fx-background-image: url('fondoe3.jpg'); -fx-background-size: cover"
       fx:controller="com.example.prueba_apod.controllers.ControllerRegistration"
       prefHeight="Infinity" alignment="CENTER" spacing="15">
     <ToolBar>
@@ -33,7 +34,7 @@
     <RadioButton fx:id="rdoFem" text="Female" toggleGroup="$generoGoup" style="-fx-font-size: 11pt; -fx-font-weight: bold; -fx-text-fill: #F23322;"/>
     <Label text="Enter your email" style="-fx-font-size: 11pt; -fx-font-weight: bold; -fx-text-fill: #0d448c;"/>
     <TextField fx:id="txtmail" prefWidth="250" minWidth="250" maxWidth="250"/>
-    <Label  fx:id="lblusermsj" style="-fx-font-size: 11pt; -fx-font-weight: bold; -fx-text-fill: #0d448c;"/>
+    <Label  fx:id="lblusermsj" style="-fx-font-size: 11pt; -fx-font-weight: bold; -fx-text-fill: #5a99ef;"/>
     <TextField fx:id="txtuser" prefWidth="250" minWidth="250" maxWidth="250"/>
     <Label text="Enter your password" style="-fx-font-size: 11pt; -fx-font-weight: bold; -fx-text-fill: #0d448c;"/>
     <PasswordField fx:id="txtpassregi" prefWidth="250" minWidth="250" maxWidth="250"/>

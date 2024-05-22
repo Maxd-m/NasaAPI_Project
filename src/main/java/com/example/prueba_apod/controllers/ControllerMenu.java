@@ -32,6 +32,8 @@ public class ControllerMenu implements Initializable {
     @FXML
     private Button btnImageVideoLib;
     @FXML
+    private Button btnAsteroids;
+    @FXML
     private Panel mainPanel;
     @FXML
     private VBox rootVbox;
@@ -147,6 +149,32 @@ public class ControllerMenu implements Initializable {
 
     @FXML
     public void onAsteroidsButtonCLick(ActionEvent actionEvent) {
+        try {
+            // Cargo la vista
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/asteroid-view.fxml"));
+
+
+            // Cargo el padre
+            Parent root = loader.load();
+
+            // Obtengo el controlador
+            //InsertarServiciosController controlador = loader.getController();
+            ControllerAsteroid controlador = loader.getController();
+            controlador.setUser(isUser);
+            controlador.setCurrentUser(getCurrentUser());
+            controlador.setKey(getKey());
+            controlador.setAdmin(isAdmin);
+//           System.out.println(isUser);
+
+            VBox currentRoot = (VBox) this.btnAsteroids.getScene().getRoot();
+
+            // Reemplazo el contenido del contenedor actual con el nuevo contenido
+            currentRoot.getChildren().setAll(root);
+
+
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public boolean isUser() {

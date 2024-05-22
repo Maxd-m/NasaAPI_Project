@@ -22,23 +22,23 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.prueba_apod.controllers.ControllerAsteroid">
+      fx:controller="com.example.prueba_apod.controllers.ControllerAsteroid"
+      style="-fx-background-color: black">
 
 
 
         <VBox spacing="5" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
 
-            <ToolBar>
-                <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick" styleClass="btn,btn-default, btn-xs"/>
+            <ToolBar style="-fx-background-color: black">
+                <Button fx:id="btnBack" style="-fx-background-color: black" text="Back" textFill="aliceblue" onAction="#onBackButtonClick" styleClass="btn,btn-primary, btn-xs"/>
             </ToolBar>
 
-            <Panel fx:id="mainPanel" >
+            <Panel fx:id="mainPanel" style="-fx-background-image: url('fondoe3.jpg'); -fx-background-size: cover" >
 
-                <heading>
-
-                    <HBox spacing="10">
-                        <Label text="Asteroid - NeoWs " styleClass="h3"/>
-                        <Label text="(Near Earth Object Web Service)" styleClass="h4"/>
+                <heading >
+                    <HBox spacing="10" >
+                        <Label text="Asteroid - NeoWs " styleClass="h3" style="-fx-text-fill: #1b6c52" />
+                        <Label text="(Near Earth Object Web Service)" styleClass="h4" style="-fx-text-fill: #1b6c52"/>
                     </HBox>
                 </heading>
 
@@ -50,11 +50,11 @@
                         </padding>
 
                         <HBox spacing="10" alignment="CENTER">
-                            <Label fx:id="loadingLabel" />
-                            <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
+                            <Label fx:id="loadingLabel" styleClass="h4" style="-fx-text-fill: #1b6c52" />
+                            <Button fx:id="searchBtn" text="Search"  styleClass="btn,btn-primary" scaleY="1.1" onAction="#onSearchButtonClick"/>
                             <VBox>
-                                <Label fx:id="datest" text="Date" style="-fx-font-family: 'Rockwell Extra Bold'; -fx-font-size: 10"></Label>
-                                <DatePicker fx:id="datePickerstart" onAction="#onDatePicked" editable="false" />
+                                <Label fx:id="datest" text="Date" style="-fx-font-family: 'Rockwell Extra Bold'; -fx-font-size: 10" textFill="aliceblue"></Label>
+                                <DatePicker fx:id="datePickerstart" onAction="#onDatePicked" editable="false" style="-fx-background-color: blue; -fx-font-size: 13; "/>
                             </VBox>
                             <!--VBox>
                                 <Label fx:id="dateend" text="End" style="-fx-font-family: 'Rockwell Extra Bold'; -fx-font-size: 10"></Label>
@@ -70,29 +70,29 @@
                         </HBox>
 
                         <VBox >
-                            <TableView fx:id="tableAsteroids">
+                            <TableView fx:id="tableAsteroids" style="-fx-background-color: black">
                                 <columns>
                                     <TableColumn fx:id="tblcolumnid" text="ID">
                                         <cellValueFactory>
                                             <PropertyValueFactory property="id"/>
                                         </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn fx:id="tblcolumnname" text="NAME">
+                                    <TableColumn fx:id="tblcolumnname" text="NAME" prefWidth="200">
                                         <cellValueFactory>
                                             <PropertyValueFactory property="name"/>
                                         </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn fx:id="tblcolumnURL" text="URL CONSULT">
+                                    <TableColumn fx:id="tblcolumnURL" text="URL CONSULT" prefWidth="400">
                                         <cellValueFactory>
                                             <PropertyValueFactory property="nasaJplUrl"/>
                                         </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn fx:id="tblcolumnsentry" text="IS SENTRY OBJECT">
+                                    <TableColumn fx:id="tblcolumnmagnitude" text="ABSOLUTE MAGNITUDE (KM)" prefWidth="200">
                                         <cellValueFactory>
-                                            <PropertyValueFactory property="isSentryObject"/>
+                                            <PropertyValueFactory property="absoluteMagnitudeH"/>
                                         </cellValueFactory>
                                     </TableColumn>
-                                    <TableColumn fx:id="tblcolumnpotentialhazard" text="IS POTENTIAL HAZARD">
+                                    <TableColumn fx:id="tblcolumnpotentialhazard" text="IS POTENTIAL HAZARD" prefWidth="200" >
                                         <cellValueFactory>
                                             <PropertyValueFactory property="isPotentiallyHazardousAsteroid"/>
                                         </cellValueFactory>
@@ -101,15 +101,10 @@
                                 <!--WebView fx:id="webView" maxWidth="854" maxHeight="480" /-->
                             </TableView>
                         </VBox>
-
                     </VBox>
                 </body>
-
             </Panel>
         </VBox>
-
-
-
 </VBox>
 
 

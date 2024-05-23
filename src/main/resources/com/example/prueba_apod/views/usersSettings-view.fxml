@@ -15,7 +15,7 @@
       fx:controller="com.example.prueba_apod.controllers.ControllerUsersSettings"
       prefHeight="400.0" prefWidth="600.0" >
 
-    <ToolBar>
+    <ToolBar style="-fx-background-color: #000">
         <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick" styleClass="btn,btn-default, btn-xs">
             <tooltip><Tooltip text="Go back to menu"/></tooltip>
         </Button>
@@ -31,7 +31,7 @@
 
         <BorderPane fx:id="bp" BorderPane.alignment="BASELINE_CENTER" VBox.vgrow="ALWAYS">
             <top>
-                <VBox spacing="40" alignment="CENTER">
+                <VBox spacing="65" alignment="CENTER">
 
                     <HBox spacing="20"  alignment="CENTER" >
                         <ComboBox fx:id="usersCB"/>
@@ -39,8 +39,8 @@
                         <Button text="Update" fx:id="btnUpdate" onAction="#onUpdateButtonClick"/>
                         <Button text="Report" fx:id="btnReport" onAction="#onReportButtonCLick"/>
                     </HBox>
-
-
+                    <Button visible="false" styleClass="btn, btn-lg"/>
+                    <!--Button visible="false" prefHeight="5"/-->
                 </VBox>
             </top>
 

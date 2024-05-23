@@ -26,7 +26,7 @@
 
 
 
-            <ToolBar>
+            <ToolBar style="-fx-background-color: #000">
                 <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick" styleClass="btn,btn-default, btn-xs">
                     <tooltip><Tooltip text="Go back to menu"/></tooltip>
                 </Button>
@@ -62,11 +62,15 @@
                         <ScrollPane fitToHeight="true" fitToWidth="true">
                             <FlowPane styleClass="bg-info" alignment="TOP_CENTER">
                                 <VBox  alignment="CENTER">
-                                    <Label fx:id="titleLabel" styleClass="text-info" alignment="TOP_LEFT" style="-fx-font-family: 'Rockwell Extra Bold'; -fx-font-size: 18"/>
-                                    <Label fx:id="contentLabel" styleClass="text-info" wrapText="true" maxWidth="900" style="-fx-font-family: 'Rockwell'; -fx-font-size: 15"/>
+                                    <HBox>
+                                        <!--ImageView fx:id="image" /-->
+                                        <WebView fx:id="webView" maxWidth="854" maxHeight="480" />
+                                        <VBox alignment="TOP_LEFT">
+                                            <Label fx:id="titleLabel" styleClass="text-info" alignment="CENTER" style="-fx-font-family: 'Rockwell Extra Bold'; -fx-font-size: 18"/>
+                                            <Label fx:id="contentLabel" styleClass="text-info" wrapText="true" maxWidth="400" style="-fx-font-family: 'Rockwell'; -fx-font-size: 15"/>
+                                        </VBox>
+                                    </HBox>
 
-                                    <ImageView fx:id="image" />
-                                    <WebView fx:id="webView" maxWidth="854" maxHeight="480" />
                                 </VBox>
                             </FlowPane>
                         </ScrollPane>

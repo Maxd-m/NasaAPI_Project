@@ -16,9 +16,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.IOException;
@@ -193,6 +196,9 @@ public class ControllerUsersSettings implements Initializable {
                 genre.add("M");
             }
 
+            //Label lblName=new Label("User name");
+            //lblName.setStyle("-fx-background-color: #000");
+
             updateForm =Form.of(
                     Group.of(
                             Field.ofStringType(newUser.getUser()).label("User name").required("Obligatory field"),
@@ -207,6 +213,8 @@ public class ControllerUsersSettings implements Initializable {
 
             FormRenderer fr = new FormRenderer(updateForm);
             fr.setPrefWidth(600);
+            fr.setPrefHeight(400);
+            fr.setBackground(Background.fill(Color.rgb(1,2,3)));
 
             //formUpdateCont.getChildren().add(fr);
             bp.setRight(fr);

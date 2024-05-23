@@ -328,7 +328,7 @@ public class ControllerMenu implements Initializable {
             //st.close();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/usersSettings-view.fxml"));
 
-            System.out.println("user: "+getCurrentUser().getName());
+            //System.out.println("user: "+getCurrentUser().getName());
             // Cargo el padre
             Parent root = loader.load();
 

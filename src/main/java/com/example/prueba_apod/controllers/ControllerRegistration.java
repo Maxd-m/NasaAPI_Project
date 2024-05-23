@@ -41,7 +41,7 @@ public class ControllerRegistration implements Initializable {
             }
         });
         LimitarTF.addTextLimiter(txtedad,2);
-        lblusermsj.setText("Enter your username\n (you will log in with it in the future)");
+        //lblusermsj.setText("Enter your username\n (you will log in with it in the future)");
         /*
         *  btnRegi.setOnAction(new EventHandler<ActionEvent>() {
             @Override

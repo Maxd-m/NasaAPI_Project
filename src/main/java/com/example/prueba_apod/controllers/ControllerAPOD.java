@@ -47,8 +47,8 @@ public class ControllerAPOD implements Initializable {
     private Label contentLabel;
     @FXML
     private VBox contentVbox;
-    @FXML
-    private ImageView image;
+    //@FXML
+    //private ImageView image;
     @FXML
     private WebView webView;
     @FXML
@@ -172,14 +172,16 @@ public class ControllerAPOD implements Initializable {
 
                         if(apod.getMedia_type().equals(new String("image"))){
                             Platform.runLater(()->{
-                                image.setVisible(true);
-                                webView.setVisible(false);
-                                Image auxImage=new Image(apod.getUrl());
+                                //image.setVisible(true);
+                                //webView.setVisible(false);
+                                //Image auxImage=new Image(apod.getUrl());
+                                webView.setVisible(true);
+                                webView.getEngine().load(apod.getUrl());
 
                                 //image=new ImageView(auxImage);
-                                image.setImage(auxImage);
-                                image.setFitWidth(300); // Ajusta el ancho según sea necesario
-                                image.setPreserveRatio(true);
+                                //image.setImage(auxImage);
+                                //image.setFitWidth(300); // Ajusta el ancho según sea necesario
+                                //image.setPreserveRatio(true);
 
                             });
 
@@ -188,7 +190,7 @@ public class ControllerAPOD implements Initializable {
                         }
                         else if (apod.getMedia_type().equals(new String("video"))) {
                             Platform.runLater(()->{
-                                image.setVisible(false);
+                                //image.setVisible(false);
                                 // WebView wb = new WebView();
                                 webView.setVisible(true);
                                 webView.getEngine().load(apod.getUrl());
@@ -201,7 +203,7 @@ public class ControllerAPOD implements Initializable {
 
                         Platform.runLater(()->{
                             titleLabel.setText(apod.getTitle());
-                            contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\nExplanation: "+apod.getExplanation());
+                            contentLabel.setText("Copyright: "+apod.getCopyright()+"\nDate: "+apod.getDate()+"\n\nExplanation: "+apod.getExplanation());
                             searchBtn.setDisable(false);
                             btnBack.setDisable(false);
                             btnSave.setDisable(false);
@@ -275,6 +277,7 @@ public class ControllerAPOD implements Initializable {
             ControllerMenu controlador = loader.getController();
             controlador.setUser(isUser);
             controlador.setAdmin(isAdmin);
+            controlador.setCurrentUser(getCurrentUser());
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 

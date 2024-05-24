@@ -201,12 +201,12 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer>
         user1.setName(this.name.getValue());
         user1.setAge(this.age.getValue());
         user1.setMail(this.mail.getValue());
-        if (cveAdmin==null)
+        if (bool.get())
         {
-            user1.setCveAdmin(null);
+            user1.setCveAdmin("1");
         }else
         {
-            user1.setCveAdmin(cveAdmin);
+            user1.setCveAdmin(null);
         }
         user1.setGender(gProperty().getValue());
         return user1;
@@ -228,7 +228,10 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer>
         if (us.getCveAdmin()==null)
         {
             bool.setValue(false);
-        };
+        }else
+        {
+            bool.setValue(true);
+        }
         name.setValue(us.getName());
         pass.setValue(us.getPass());
     }

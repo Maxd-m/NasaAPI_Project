@@ -2,15 +2,36 @@ package com.example.prueba_apod.database.dao;
 
 //import com.vgsg.login.MySQLConnection;
 //import com.vgsg.login.models.User;
+import com.dlsc.formsfx.model.structure.Field;
+import com.dlsc.formsfx.model.structure.Form;
+import com.dlsc.formsfx.model.structure.Group;
 import com.example.prueba_apod.models.User;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import com.example.prueba_apod.database.MySQLConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
+public class DAOUser extends MySQLConnection implements Dao<User,Integer>
+{
+    ArrayList<String>genders= new ArrayList<>(){{
+        add("H");
+        add("M");
+    }};
+    private final ListProperty<String> allGenders =
+            new SimpleListProperty<>(FXCollections.observableArrayList(genders));
+    private final ObjectProperty<String> i= new SimpleObjectProperty<String>(allGenders.get(0));
+    IntegerProperty age = new SimpleIntegerProperty(0);
+    StringProperty name = new SimpleStringProperty("");
+    StringProperty pass = new SimpleStringProperty("");
+    StringProperty mail = new SimpleStringProperty("");
+    StringProperty user = new SimpleStringProperty("");
+    BooleanProperty bool = new SimpleBooleanProperty(false);
+    String cveAdmin = null;
+
     Connection conn = getConnection();
     @Override
     public Optional<User> findById(Integer id) {
@@ -95,7 +116,8 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
             ps.setString(5,usr.getMail());
             ps.setString(6,usr.getGender());
             ps.setString(7,usr.getCveAdmin());
-
+            ps.setInt(8, usr.getId());
+            System.out.println(usr.getId()+"id");
             /*
             * ps.setString(1, auto.getNombreMarca());
             ps.setString(2, auto.getModelo());
@@ -154,5 +176,67 @@ public class DAOUser extends MySQLConnection implements Dao<User,Integer> {
             throw new RuntimeException(e);
         }
         return usersList;
+    }
+
+    public Form createForm()
+    {
+        return Form.of(
+                Group.of(
+                        Field.ofStringType(this.user).label("User name").required("Obligatory field"),
+                        Field.ofStringType(this.pass).label("Password").required("Obligatory field"),
+                        Field.ofStringType(this.name).label("Name").required("Obligatory field"),
+                        Field.ofIntegerType(this.age).label("Age").required("Obligatory field"),
+                        Field.ofStringType(this.mail).label("Email").required("Obligatory field"),
+                        Field.ofBooleanType(this.bool).label("Administrator"),
+                        Field.ofSingleSelectionType(allgProperty(), gProperty()).label("Genre").required("Obligatory field")
+                )
+        );
+    }
+    public User generateUser(int id)
+    {
+        User user1= new User();
+        user1.setId(id);
+        user1.setUser(this.user.getValue());
+        user1.setPass(this.pass.getValue());
+        user1.setName(this.name.getValue());
+        user1.setAge(this.age.getValue());
+        user1.setMail(this.mail.getValue());
+        if (cveAdmin==null)
+        {
+            user1.setCveAdmin(null);
+        }else
+        {
+            user1.setCveAdmin(cveAdmin);
+        }
+        user1.setGender(gProperty().getValue());
+        return user1;
+    }
+
+    public void setFields(User us)
+    {
+        age.setValue(us.getAge());
+        mail.setValue(us.getMail());
+        if(us.getGender().equals("M"))
+        {
+            gProperty().setValue("M");
+        }
+        else
+        {
+            gProperty().setValue("H");
+        }
+        user.setValue(us.getUser());
+        if (us.getCveAdmin()==null)
+        {
+            bool.setValue(false);
+        };
+        name.setValue(us.getName());
+        pass.setValue(us.getPass());
+    }
+    public ObjectProperty<String> gProperty() {
+        return i;
+    }
+
+    public ListProperty<String> allgProperty() {
+        return allGenders;
     }
 }

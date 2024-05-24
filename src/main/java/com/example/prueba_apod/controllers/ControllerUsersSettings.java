@@ -43,7 +43,8 @@ public class ControllerUsersSettings implements Initializable {
     private List<User> userList;
     private User currentUser=new User();
     private Form updateForm;
-    private User newUser;
+    private DAOUser duser;
+    private User newUser, upUser;
     //int id;
 
 
@@ -86,13 +87,10 @@ public class ControllerUsersSettings implements Initializable {
     }
 
     public void onUpdateButtonClick(ActionEvent actionEvent) {
-        User upd = new User();
-        upd.setUser(String.valueOf(updateForm.getFields().get(0)));
-        System.out.println("Nombre actualizar: "+newUser.getName());
-
-
-        //new DAOUser().update(newUser);
-
+        updateForm.persist();
+        upUser=duser.generateUser((Integer) usersCB.getValue());
+        System.out.println(upUser.getAge());
+        duser.update(upUser);
     }
 
     @Override
@@ -173,44 +171,10 @@ public class ControllerUsersSettings implements Initializable {
     }
 
     private void innitForm(){
-        Optional<User> upUser = new DAOUser().findById((Integer) usersCB.getValue());
-        System.out.println("chosed: "+usersCB.getValue());
 
-        if(upUser.isPresent()){
-            newUser = upUser.get();
-            System.out.println("mail: "+newUser.getMail());
-
-            boolean isadmin;
-            if(newUser.getCveAdmin()==null){
-                isadmin=false;
-            }else {
-                isadmin = true;
-            }
-
-            ArrayList<String> genre=new ArrayList<>();
-            if(newUser.getGender().equals("H")){
-                genre.add("M");
-                genre.add("F");
-            }else {
-                genre.add("F");
-                genre.add("M");
-            }
-
-            //Label lblName=new Label("User name");
-            //lblName.setStyle("-fx-background-color: #000");
-
-            updateForm =Form.of(
-                    Group.of(
-                            Field.ofStringType(newUser.getUser()).label("User name").required("Obligatory field"),
-                            Field.ofStringType(newUser.getPass()).label("Password").required("Obligatory field"),
-                            Field.ofStringType(newUser.getName()).label("Name").required("Obligatory field"),
-                            Field.ofIntegerType(newUser.getAge()).label("Age").required("Obligatory field"),
-                            Field.ofStringType(newUser.getMail()).label("Email").required("Obligatory field"),
-                            Field.ofBooleanType(isadmin).label("Administrator"),
-                            Field.ofSingleSelectionType(genre,0).label("Genre").required("Obligatory field")
-                    )
-            );
-
+            duser = new DAOUser();
+            updateForm = duser.createForm();
+            duser.setFields(duser.findById((Integer) usersCB.getValue()).get());
             FormRenderer fr = new FormRenderer(updateForm);
             fr.setPrefWidth(600);
             fr.setPrefHeight(400);
@@ -218,7 +182,6 @@ public class ControllerUsersSettings implements Initializable {
 
             //formUpdateCont.getChildren().add(fr);
             bp.setRight(fr);
-        }
     }
 
     private void showMessage(String title, String message, Alert.AlertType alertType){

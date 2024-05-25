@@ -23,6 +23,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import javax.swing.plaf.basic.BasicTreeUI;
 import java.awt.event.MouseListener;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -40,6 +42,13 @@ public class ControllerIVL
 {
     @FXML
     private VBox ap;
+    @FXML
+    private FontIcon fim;
+    @FXML
+    private FontIcon fvi;
+    @FXML
+    private FontIcon fau;
+
     private int i=0, size=5;
     private boolean isUser;
     Example example;
@@ -48,30 +57,120 @@ public class ControllerIVL
     @FXML
     private Button btnBack;
     @FXML
+    private Button searchBtn;
+    @FXML
     private Button btnb;
     @FXML
     private Button btns;
     @FXML
     private GridPane gp;
+    private boolean ban1=true, ban2=true, ban3=true;
 
     private org.apache.http.client.HttpClient client = HttpClients.custom().build();
     Gson gson = new Gson();
+
     @FXML
-    protected void onDatePicked() {
+    protected String filterurl(String url)
+    {
+        String aux="%20landing&media_type=";
+        if (ban1)
+        {
+            aux=aux+"image,";
+        }
+        if (ban3)
+        {
+            aux=aux+"video,";
+        }
+        if (ban2)
+        {
+            aux=aux+"audio,";
+        }
+        if(ban1 && ban2 && ban3)
+        {
+            aux="";
+        }
+        else
+        {
+            aux=aux.substring(0, aux.length()-1);
+        }
+        return url+aux;
     }
     @FXML
-    protected void onSaveButtonClick() {
-
+    protected void onSearchIButtonClick() throws IOException
+    {
+        ban1= !ban1;
+        if (!ban1 && !ban2 && !ban3)
+        {
+            searchBtn.setDisable(true);
+        }
+        else
+        {
+            searchBtn.setDisable(false);
+        }
+        if (!ban1)
+        {
+            fim.setIconLiteral("far-times-circle");
+            fim.setIconColor(Color.RED);
+        }
+        else
+        {
+            fim.setIconLiteral("far-check-circle");
+            fim.setIconColor(Color.LAWNGREEN);
+        }
     }
     @FXML
-    protected void onReportButtonClick() {
-
+    protected void onSearchAButtonClick() throws IOException
+    {
+        ban2= !ban2;
+        if (!ban2)
+        {
+            fau.setIconLiteral("far-times-circle");
+            fau.setIconColor(Color.RED);
+        }
+        else
+        {
+            fau.setIconLiteral("far-check-circle");
+            fau.setIconColor(Color.LAWNGREEN);
+        }
+        if (!ban1 && !ban2 && !ban3)
+        {
+            searchBtn.setDisable(true);
+        }
+        else
+        {
+            searchBtn.setDisable(false);
+        }
+    }
+    @FXML
+    protected void onSearchVButtonClick() throws IOException
+    {
+        ban3= !ban3;
+        if (!ban1 && !ban2 && !ban3)
+        {
+            searchBtn.setDisable(true);
+        }
+        else
+        {
+            searchBtn.setDisable(false);
+        }
+        if (!ban3)
+        {
+            fvi.setIconLiteral("far-times-circle");
+            fvi.setIconColor(Color.RED);
+        }
+        else
+        {
+            fvi.setIconLiteral("far-check-circle");
+            fvi.setIconColor(Color.LAWNGREEN);
+        }
     }
     @FXML
     protected void onSearchButtonClick() throws IOException
     {
-        gp.getChildren().clear();
-        URL url= new URL("https://images-api.nasa.gov/search?q="+getsearch());
+        i=0;
+        String urls="https://images-api.nasa.gov/search?q="+getsearch();
+        URL url= new URL(filterurl(urls));
+        System.out.println(filterurl(urls));
         client = HttpClients.custom().build();
         HttpGet request = new HttpGet(String.valueOf(url));
         org.apache.http.HttpResponse response = null;
@@ -88,7 +187,8 @@ public class ControllerIVL
     }
 
     protected void load() throws MalformedURLException {
-        if (size==5)
+        gp.getChildren().clear();
+        if (size<=5)
         {
             btnb.setDisable(true);
         }
@@ -99,11 +199,26 @@ public class ControllerIVL
         while (i<size)
         {
             WebView wb= new WebView();
+                System.out.println(example.getCollection().getItems().get(i).getData().get(0).getMediaType());
             if(!example.getCollection().getItems().get(i).getData().get(0).getMediaType().equals("image"))
             {
-                wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(
-                        example.getCollection().getItems().get(i).getHrefs().size()-2
-                )));
+                List<String> hrefs = example.getCollection().getItems().get(i).getHrefs();
+                int x =0;
+                String au;
+                while (x<hrefs.size())
+                {
+                    au=hrefs.get(x).substring(hrefs.get(x).length()-4);
+                    System.out.println(au);
+                    if (au.equals(".jpg"))
+                    {
+                        wb.getEngine().load(modifyurl(hrefs.get(x)));
+                        x=hrefs.size();
+                    }
+                    else
+                    {
+                        x=x+1;
+                    }
+                }
             }
             else {
                 wb.getEngine().load(modifyurl(example.getCollection().getItems().get(i).getHrefs().get(0)));
@@ -129,7 +244,43 @@ public class ControllerIVL
     protected void getDetails(WebView wb, int index) throws MalformedURLException {
         if(example.getCollection().getItems().get(index).getData().get(0).getMediaType().equals("video"))
         {
-            wb.getEngine().load(modifyurl(example.getCollection().getItems().get(index).getHrefs().get(2)));
+            List<String> hrefs = example.getCollection().getItems().get(index).getHrefs();
+            int x =0;
+            String au;
+            while (x<hrefs.size())
+            {
+                au=hrefs.get(x).substring(hrefs.get(x).length()-4);
+                System.out.println(au);
+                if (au.equals(".mp4"))
+                {
+                    wb.getEngine().load(modifyurl(hrefs.get(x)));
+                    x=hrefs.size();
+                }
+                else
+                {
+                    x=x+1;
+                }
+            }
+        }
+        if(example.getCollection().getItems().get(index).getData().get(0).getMediaType().equals("audio"))
+        {
+            List<String> hrefs = example.getCollection().getItems().get(index).getHrefs();
+            int x =0;
+            String au;
+            while (x<hrefs.size())
+            {
+                au=hrefs.get(x).substring(hrefs.get(x).length()-4);
+                System.out.println(au);
+                if (au.equals(".mp3"))
+                {
+                    wb.getEngine().load(modifyurl(hrefs.get(x)));
+                    x=hrefs.size();
+                }
+                else
+                {
+                    x=x+1;
+                }
+            }
         }
         gp.getChildren().clear();
         gp.add(wb, 0,0);
@@ -256,5 +407,4 @@ public class ControllerIVL
         gp.getChildren().clear();
         load();
     }
-
 }

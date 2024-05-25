@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
+<?import org.kordamp.ikonli.javafx.StackedFontIcon?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.prueba_apod.controllers.ControllerIVL" alignment="TOP_CENTER"
       style="-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover">
@@ -34,7 +35,37 @@
 
         <HBox alignment="CENTER">
           <TextField fx:id="input_search" style="-fx-font-size: 25"></TextField>
-          <Button fx:id="searchBtn" text="Search" style="-fx-background-color: black; -fx-font-size: 20" prefWidth="100" prefHeight="45" styleClass="btn,btn-primary" onAction="#onSearchButtonClick"/>
+          <Button fx:id="searchBtn" text="Search" style="-fx-background-color: black; -fx-font-size: 20" prefWidth="120" prefHeight="45" styleClass="btn,btn-primary" onAction="#onSearchButtonClick">
+            <graphic>
+              <FontIcon iconLiteral="fab-sistrix" iconSize="20" iconColor="white"/>
+            </graphic>
+          </Button>
+        </HBox>
+        <HBox alignment="CENTER">
+          <Button fx:id="imageBtn" text="Images" style="-fx-background-color: #0d0d69; -fx-font-size: 20" prefWidth="150" prefHeight="45" styleClass="btn,btn-primary" onAction="#onSearchIButtonClick">
+            <graphic>
+              <HBox alignment="CENTER_RIGHT" spacing="10.0" >
+                <FontIcon fx:id="fim" iconLiteral="far-check-circle" iconSize="20" iconColor="lawngreen"/>
+                <FontIcon iconLiteral="far-images" iconSize="20" iconColor="white"/>
+              </HBox>
+            </graphic>
+          </Button>
+          <Button fx:id="videoBtn" text="Videos" style="-fx-background-color: #0d0d69; -fx-font-size: 20" prefWidth="150" prefHeight="45" styleClass="btn,btn-primary" onAction="#onSearchVButtonClick">
+            <graphic>
+              <HBox alignment="CENTER_RIGHT" spacing="10.0" >
+                <FontIcon fx:id="fvi" iconLiteral="far-check-circle" iconSize="20" iconColor="lawngreen"/>
+                <FontIcon iconLiteral="fas-video" iconSize="20" iconColor="white"/>
+              </HBox>
+            </graphic>
+          </Button>
+          <Button fx:id="audioBtn" text="Audios" style="-fx-background-color: #0d0d69; -fx-font-size: 20" prefWidth="150" prefHeight="45" styleClass="btn,btn-primary" onAction="#onSearchAButtonClick">
+            <graphic>
+              <HBox alignment="CENTER_RIGHT" spacing="10.0" >
+                <FontIcon fx:id="fau" iconLiteral="far-check-circle" iconSize="20" iconColor="lawngreen"/>
+                <FontIcon iconLiteral="fas-headphones-alt" iconSize="20" iconColor="white"/>
+              </HBox>
+            </graphic>
+          </Button>
         </HBox>
         <GridPane style="-fx-background-color: black" fx:id="gp" alignment="CENTER" hgap="10" vgap="10">
         </GridPane>

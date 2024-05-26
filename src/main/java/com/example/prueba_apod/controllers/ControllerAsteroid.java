@@ -80,8 +80,6 @@ public class ControllerAsteroid implements Initializable {
 
         searchBtn.setDisable(true);
 
-        //btnBack.setDisable(true);
-        loadingLabel.setText("LOADING...");
 
         new Thread(()->{
 
@@ -114,6 +112,7 @@ public class ControllerAsteroid implements Initializable {
                     Body nearObject = gson.fromJson(gsonItem, Body.class);
                     System.out.println(nearObject.getName());
                     nearObjectsList.add(nearObject);
+                    bodylist=nearObjectsList;
                 }
             }
 
@@ -142,19 +141,6 @@ public class ControllerAsteroid implements Initializable {
 
     }
 
-//    public void onDatePicked(ActionEvent actionEvent) {
-//        if(datePickerstart.getValue().isAfter(datePickerend.getValue())){
-//            showMessage("Alert","Unable to display Asteroids from a date past end_date", Alert.AlertType.WARNING);
-//            datePickerstart.setValue(LocalDate.now());
-//        }
-//        else if(datePickerstart.getValue().isBefore(LocalDate.of(1995,6,20)) || datePickerend.getValue().isBefore(LocalDate.of(1995,6,20))){
-//            showMessage("Alert","Unable to display Asteroids from a date before June 20, 1995", Alert.AlertType.WARNING);
-//            datePickerstart.setValue(LocalDate.of(1995,6,20));
-//            datePickerend.setValue(LocalDate.now());
-//        }
-//        //System.out.println(datePicker.getValue());
-//
-//    }
 
     private void showMessage(String title, String message, Alert.AlertType alertType){
         Alert alert = new Alert(alertType);
@@ -261,16 +247,6 @@ public class ControllerAsteroid implements Initializable {
         //System.out.println(this.currentUser.getId());
     }
 
-    private String decatenate(String item){
-        String procesedS="";
-        for (int i=424;i<item.length()/*-1 3*/;i++){
-            procesedS+=item.charAt(i);
-        }
-
-        procesedS="{\"near_earth_objects\":{\"Body\""+procesedS;//{"near_earth_objects":{
-
-        return procesedS;
-    }
 
 }
 //    private List<APOD> getWeekImages() throws Exception{
@@ -420,4 +396,30 @@ URL url = new URL("https://api.nasa.gov/neo/rest/v1/feed?start_date="+datePicker
             loadingLabel.setText("LOADING COMPLETE");
             btnBack.setDisable(false);
         }
+
+        //    public void onDatePicked(ActionEvent actionEvent) {
+//        if(datePickerstart.getValue().isAfter(datePickerend.getValue())){
+//            showMessage("Alert","Unable to display Asteroids from a date past end_date", Alert.AlertType.WARNING);
+//            datePickerstart.setValue(LocalDate.now());
+//        }
+//        else if(datePickerstart.getValue().isBefore(LocalDate.of(1995,6,20)) || datePickerend.getValue().isBefore(LocalDate.of(1995,6,20))){
+//            showMessage("Alert","Unable to display Asteroids from a date before June 20, 1995", Alert.AlertType.WARNING);
+//            datePickerstart.setValue(LocalDate.of(1995,6,20));
+//            datePickerend.setValue(LocalDate.now());
+//        }
+//        //System.out.println(datePicker.getValue());
+//
+//    }
+
+
+    private String decatenate(String item){
+        String procesedS="";
+        for (int i=424;i<item.length()-1 3;i++){
+procesedS+=item.charAt(i);
+        }
+
+procesedS="{\"near_earth_objects\":{\"Body\""+procesedS;//{"near_earth_objects":{
+
+        return procesedS;
+    }
  */

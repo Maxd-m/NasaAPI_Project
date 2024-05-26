@@ -88,7 +88,8 @@
         </HBox>
 
 
-        <GridPane style="-fx-background-color: black" fx:id="gp" alignment="CENTER" vgap="10">
+        <GridPane style="-fx-background-color: black;
+" fx:id="gp" alignment="CENTER" vgap="10">
         </GridPane>
         <HBox visible="false" alignment="CENTER" spacing="30" fx:id="paginado" style="-fx-background-color: white">
           <Button fx:id="btnb" text="Back" alignment="CENTER" styleClass="btn,btn-default, btn-l" onAction="#onBButtonClick">

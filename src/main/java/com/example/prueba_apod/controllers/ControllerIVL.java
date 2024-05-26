@@ -3,6 +3,7 @@ package com.example.prueba_apod.controllers;
 import com.example.prueba_apod.models.Example;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.kernel.colors.Lab;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -17,6 +18,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -24,13 +28,19 @@ import org.apache.http.impl.client.HttpClients;
 import org.controlsfx.control.RangeSlider;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.http.HttpRequest;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +79,28 @@ public class ControllerIVL implements Initializable
 
     private HttpClient client = HttpClients.custom().build();
     Gson gson = new Gson();
+
+
+    public void LoadingComponent() {
+        // Create a spinning wheel to show the loading progress
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+
+        // Create a label for the loading message
+        Label loadingLabel = new Label("Loading...");
+
+        // Create a vertical box to hold the spinning wheel and the loading message
+        VBox loadingPane = new VBox();
+        loadingPane.setAlignment(Pos.CENTER);
+        loadingPane.getChildren().addAll(progressIndicator, loadingLabel);
+        loadingPane.prefWidth(500);
+
+        // Set the style of the spinning wheel and the loading message
+        loadingPane.setStyle("-fx-font-size: 32pt; -fx-text-fill: white; -fx-background-color: black;");
+        progressIndicator.setStyle("-fx-progress-color: white;");
+
+        // Add the vertical box to the stack pane
+        gp.add(loadingPane,0,0);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -110,10 +142,18 @@ public class ControllerIVL implements Initializable
             }catch (Exception e){sl.setHighValue(2024);}
         });
     }
+    protected String getNameFile(String format)
+    {
+        TextInputDialog dialog = new TextInputDialog();  // create an instance
+        dialog.setTitle("Get Name File");
+        dialog.setContentText("Type name");
+        Optional<String> result = dialog.showAndWait();
+        return result.get()+format;
+    };
     @FXML
     protected String filterurl(String url)
     {
-        String aux="%20landing&media_type=";
+        String aux="&media_type=";
         if (ban1)
         {
             aux=aux+"image,";
@@ -210,13 +250,15 @@ public class ControllerIVL implements Initializable
     @FXML
     protected void onSearchButtonClick() throws IOException, InterruptedException
     {
+        gp.getChildren().clear();
+        paginado.visibleProperty().setValue(false);
+        LoadingComponent();
         Task<Void> task = new Task<>() {
             @Override
-            public Void call() throws MalformedURLException
-            {
+            public Void call() throws MalformedURLException {
                 i = 0;
                 size = 5;
-                String urls = "https://images-api.nasa.gov/search?q=" + getsearch() + "&year_start="+(int)sl.getLowValue()+"&year_end="+(int)sl.getHighValue();
+                String urls = "https://images-api.nasa.gov/search?q=" + getsearch() + "&year_start=" + (int) sl.getLowValue() + "&year_end=" + (int) sl.getHighValue();
                 URL url = new URL(filterurl(urls));
                 System.out.println(filterurl(urls));
                 client = HttpClients.custom().build();
@@ -236,17 +278,16 @@ public class ControllerIVL implements Initializable
                     size = example.getCollection().getItems().size();
                 }
                 System.out.println("Ta corriendo");
-                new Thread(()->{
-                        Platform.runLater(()->
-                        {
-                            try {
-                                load();
-                            } catch (MalformedURLException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+                new Thread(() -> {
+                    Platform.runLater(() ->
+                    {
+                        try {
+                            load();
+                        } catch (MalformedURLException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
                 }).start();
-                paginado.visibleProperty().setValue(true);
                 return null;
             }
         };
@@ -328,6 +369,7 @@ public class ControllerIVL implements Initializable
                                     WebView wbb= (WebView) event.getPickResult().getIntersectedNode();
                                     wbb.getEngine().reload();
                                     Integer col=GridPane.getColumnIndex(wbb);
+                                    System.out.println(col+"");
                                     try {
                                         getDetails(col);
                                     } catch (MalformedURLException e) {
@@ -337,6 +379,7 @@ public class ControllerIVL implements Initializable
                                 gp.add(wb, i, 0);
                                 i++;
                             }
+                            paginado.visibleProperty().setValue(true);
                         } else
                         {
                             Label l = new Label("No results found :(");
@@ -353,33 +396,76 @@ public class ControllerIVL implements Initializable
 
     protected void getDetails(int index) throws MalformedURLException
     {
+        String format=example.getCollection().getItems().get(index).getData().get(0).getMediaType();
+        if(format.equals("image"))
+        {
+            format=".jpg";
+        }
+        if(format.equals("video"))
+        {
+            format=".mp4";
+        }
+        if(format.equals("audio"))
+        {
+            format=".mp3";
+        }
         WebView wb=new WebView();
         changeStyle(wb);
         wb.setMaxSize(500,300);
         wb.setPrefSize(500,300);
         ArrayList<Node>arrayList=new ArrayList<>();
-        for(int in=0; in<(gp.getChildren().size());in++)
-        {
-            arrayList.add(gp.getChildren().get(in));
-            System.out.println(arrayList.size());
-        }
+        arrayList.addAll(gp.getChildren());
         Button btncomeback = new Button();
         Button btndown = new Button();
-        btncomeback.setGraphic(new FontIcon("fas-arrow-alt-circle-left"));
-        btncomeback.setStyle("-fx-background-color: #ececf1; -fx-font-size: 20");
+        FontIcon f2 = new FontIcon("fas-arrow-alt-circle-left");
+        f2.setIconColor(Color.WHITE);
+        f2.setIconSize(20);
+        btncomeback.setGraphic(f2);
+        btncomeback.setStyle("-fx-background-color: #8d0909; -fx-font-size: 20");
+        FontIcon f = new FontIcon("fas-download");
+        f.setIconColor(Color.WHITE);
+        f.setIconSize(20);
+        btndown.setGraphic(f);
+        btndown.setText("Download");
+        btndown.setStyle("-fx-background-color: #1a0e75; -fx-text-fill: white; -fx-font-size: 20");
         btncomeback.setOnAction((V)->
         {
             gp.getChildren().clear();
             for(int il=0; il<arrayList.size(); il=il+2)
             {
                 wb.getEngine().load(null);
-                gp.add(arrayList.get(il+1),il,0);
-                gp.add(arrayList.get(il),il,1);
+                gp.add(arrayList.get(il+1),(il/2)+size-5,0);
+                gp.add(arrayList.get(il),(il/2)+size-5,1);
             }
         });
+        String finalFormat = format;
+
         btndown.setOnAction((y)->
         {
-
+            VBox v=new VBox();
+            DirectoryChooser dc = new DirectoryChooser();
+            dc.setTitle("Choose a directory");
+            File file = new File("downloads");
+            dc.setInitialDirectory(file);
+            File filesave = dc.showDialog(ap.getScene().getWindow());
+            String name = getNameFile(finalFormat);
+            if(name.isBlank() || name.isEmpty())
+            {
+                name=example.getCollection().getItems().get(index).getData().get(0).getTitle();
+            }
+            try {
+                download(name, v, wb.getEngine().getLocation(), String.valueOf(filesave)+"\\"+name);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+            Label l = (new Label("File "+name+" is downloading"));
+            l.setStyle("-fx-background-color: #38ea38; -fx-font-size: 20 ");
+            v.getChildren().add(l);
+            ap.getChildren().add(v);
         });
         if(example.getCollection().getItems().get(index).getData().get(0).getMediaType().equals("image")){
         wb.getEngine().load(modifyurl(example.getCollection().getItems().get(index).getHrefs().get(0)));
@@ -428,6 +514,26 @@ public class ControllerIVL implements Initializable
         gp.add(btndown,1,1);
         gp.add(createlabel(index), 2,0);
         gp.add(btncomeback, 0, 0);
+    }
+    private static void download(String name,VBox v,String sourceURL, String targetDirectory) throws IOException, InterruptedException, URISyntaxException {
+        Task<Void> task = new Task<Void>()
+        {
+            @Override
+            public Void call() throws IOException, URISyntaxException, InterruptedException {
+                URI url = new URI(sourceURL);
+                Path path = Path.of(targetDirectory); // output file path
+                java.net.http.HttpClient.newHttpClient().send(HttpRequest.newBuilder(url).build(), java.net.http.HttpResponse.BodyHandlers.ofFile(path));
+                return null;
+            }
+        };
+        new Thread(task).start();
+        task.setOnSucceeded((m)->
+        {
+                Label label=new Label("File " + name + " is downloaded");
+                v.getChildren().clear();
+                label.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 20");
+                v.getChildren().add(label);
+        });
     }
     protected Node createlabel(int index)
     {
@@ -539,7 +645,8 @@ public class ControllerIVL implements Initializable
         }
 
         gp.getChildren().clear();
-        load();
+        LoadingComponent();
+        new Thread(()->Platform.runLater(returnload())).start();
     }
 
     @FXML
@@ -557,6 +664,20 @@ public class ControllerIVL implements Initializable
         }
         btnb.setDisable(false);
         gp.getChildren().clear();
-        load();
+        LoadingComponent();
+        new Thread(()->Platform.runLater(returnload())).start();
+    }
+
+    protected Task<Void> returnload()
+    {
+        Task<Void> task = new Task<Void>()
+        {
+            @Override
+            public Void call() throws IOException, URISyntaxException, InterruptedException {
+                load();
+                return null;
+            }
+        };
+        return task;
     }
 }

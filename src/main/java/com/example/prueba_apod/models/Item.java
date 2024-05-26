@@ -57,6 +57,7 @@ public class Item {
         org.apache.http.client.HttpClient client = HttpClients.custom().build();
         Gson gson = new Gson();
         URL url= new URL(modifyurl(getHref()));
+        System.out.println(modifyurl(getHref()));
         client = HttpClients.custom().build();
         HttpGet request = new HttpGet(String.valueOf(url));
         org.apache.http.HttpResponse response = null;
@@ -68,6 +69,7 @@ public class Item {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         List<String>hrefs=gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
         return hrefs;
     }

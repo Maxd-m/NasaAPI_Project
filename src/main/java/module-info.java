@@ -20,6 +20,7 @@ module com.example.prueba_apod {
     requires org.apache.httpcomponents.httpcore;
     requires java.annotation;
     requires java.net.http;
+    requires org.controlsfx.controls;
 
     opens com.example.prueba_apod to javafx.fxml;
     //opens com.example.prueba_apod.models to com.google.gson;

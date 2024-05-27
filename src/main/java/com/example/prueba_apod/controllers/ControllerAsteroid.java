@@ -85,7 +85,7 @@ public class ControllerAsteroid implements Initializable {
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.nasa.gov/neo/rest/v1/feed?start_date="+datePickerstart.getValue().toString()+"&end_date="+datePickerstart.getValue().toString()+"&api_key="+"9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK"))
+                    .uri(URI.create("https://api.nasa.gov/neo/rest/v1/feed?start_date="+datePickerstart.getValue().toString()+"&end_date="+datePickerstart.getValue().toString()+"&api_key="+getKey()))
                     .build();
 
             HttpResponse<String> response = null;

@@ -150,11 +150,11 @@ public class ControllerAPOD implements Initializable {
                     System.out.println("request0: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
 
                 });
-                String aux2="https://api.nasa.gov/planetary/apod?api_key="+"9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK"+"&date=" + datePicker.getValue().toString();
+                String aux2="https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString();
                 try {
 
                     //System.out.println("request1: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
-                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key="+"9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK"+"&date=" + datePicker.getValue().toString());
+                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
                     //System.out.println("request: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");

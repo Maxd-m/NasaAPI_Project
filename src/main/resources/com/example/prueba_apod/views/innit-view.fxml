@@ -11,8 +11,8 @@
 <VBox xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
        fx:controller="com.example.prueba_apod.controllers.InnitController"
-        style="-fx-background-color: #fff"
-       prefHeight="400.0" prefWidth="600.0" alignment="CENTER"  spacing="100">
+        style="-fx-background-image: url('cielo.gif')"
+       prefHeight="400.0" prefWidth="600.0" alignment="CENTER"  spacing="120">
     <VBox alignment="TOP_CENTER">
         <Label fx:id="lblNasa"/>
     </VBox>
@@ -40,16 +40,16 @@
         </VBox>
     </Panel>
     -->
-    <VBox alignment="CENTER" spacing="10" style="-fx-background-color: #fff">
-        <Label text="User" style="-fx-font-size: 16pt; -fx-font-weight: bold; -fx-text-fill: #03318c;"/>
-        <TextField fx:id="txtUser" prefWidth="250" minWidth="250" maxWidth="250"/>
-        <Label text="Password" style="-fx-font-size: 16pt; -fx-font-weight: bold; -fx-text-fill: #03318c;"/>
-        <PasswordField fx:id="txtPass" prefWidth="250" minWidth="250" maxWidth="250"/>
-        <Button fx:id="btnInit" text="Sign in" style="-fx-font-size: 11pt; -fx-background-color: #03318C; -fx-text-fill: #f2f2f2;" onAction="#onInitButtonClick"/>
+    <VBox alignment="CENTER" spacing="20" style="-fx-background-color: transparent">
+        <Label text="User" style="-fx-font-size: 25pt; -fx-font-weight: bold; -fx-text-fill: #164fc2;"/>
+        <TextField fx:id="txtUser" style="-fx-font-size: 20" prefWidth="250" minWidth="250" maxWidth="250"/>
+        <Label text="Password" style="-fx-font-size: 25pt; -fx-font-weight: bold; -fx-text-fill: #2058c9;"/>
+        <PasswordField fx:id="txtPass" style="-fx-font-size: 20" prefWidth="250" minWidth="250" maxWidth="250"/>
         <HBox spacing="20" alignment="CENTER">
-            <Button fx:id="btnInv" text="Continue as Guest" style="-fx-font-size: 9pt; -fx-background-color: #0d448c; -fx-text-fill: #f2f2f2;" onAction="#onInvButtonCLick"/>
-            <Button fx:id="btnRegi" text="Sign up" style="-fx-font-size: 9pt; -fx-background-color: #F23322; -fx-text-fill: #f2f2f2;" onAction="#onRegiButtonCLick"/>
+            <Button fx:id="btnInit" text="Sign in" style="-fx-font-size: 15pt; -fx-background-color: #03318C; -fx-text-fill: #f2f2f2;" onAction="#onInitButtonClick"/>
+            <Button fx:id="btnRegi" text="Sign up" style="-fx-font-size: 15pt; -fx-background-color: #F23322; -fx-text-fill: #f2f2f2;" onAction="#onRegiButtonCLick"/>
         </HBox>
+        <Button fx:id="btnInv" text="Continue as Guest" style="-fx-font-size: 13pt; -fx-background-color: #0d448c; -fx-text-fill: #f2f2f2;" onAction="#onInvButtonCLick"/>
     </VBox>
 
 

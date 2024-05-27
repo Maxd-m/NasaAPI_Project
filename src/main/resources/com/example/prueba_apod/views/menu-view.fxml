@@ -20,7 +20,7 @@
     </ToolBar>
 
     <Panel fx:id="mainPanel" VBox.vgrow="ALWAYS"
-           style="-fx-background-image: url('fondoe3.jpg'); -fx-background-size: cover">
+           style="-fx-background-image: url('cielo.gif'); -fx-background-size: cover">
         <heading>
             <HBox spacing="10">
                 <Label text="MENU " styleClass="h3"/>

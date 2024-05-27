@@ -1,18 +1,23 @@
 package com.example.prueba_apod.controllers;
 
+import com.example.prueba_apod.MainApplication;
 import com.example.prueba_apod.database.dao.DAOUser;
 import com.example.prueba_apod.models.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,17 +41,26 @@ public class InnitController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String dirWeb = "www.google.com";
+        int puerto = 80;
         txtUser.setPromptText("User");
         txtPass.setPromptText("Password");
-        Image image = new Image(InnitController.class.getResource("/nasa.png").toExternalForm());
+        lblNasa.setAlignment(Pos.CENTER);
+        Image image = new Image(InnitController.class.getResource("/nasa.gif").toExternalForm());
         lblNasa.setGraphic(new ImageView(image));
-        lblNasa.setPrefSize(64,64);
-        lblNasa.setMinSize(64,64);
-        lblNasa.setMaxSize(64,64);
+        lblNasa.setPrefSize(10,64);
+        lblNasa.setMinSize(10,64);
+        lblNasa.setMaxSize(10,64);
         lblNasa.requestFocus();
+        try {
+            Socket s = new Socket(dirWeb, puerto);
+        }catch(Exception e){
+            Alert alert=new Alert(Alert.AlertType.ERROR,"You do not have an internet connection, this may\n cause problems with the application, please \nconnect to a network, thank you :3.");
+            alert.show();
+        }
     }
 
-    
+
     private boolean validaUser(String param) {
         boolean ban = false;
         try {

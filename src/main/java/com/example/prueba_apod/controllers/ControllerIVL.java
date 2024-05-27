@@ -47,6 +47,15 @@ import java.util.logging.Logger;
 
 public class ControllerIVL implements Initializable
 {
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    boolean admin;
     @FXML
     private VBox ap;
     @FXML
@@ -142,12 +151,17 @@ public class ControllerIVL implements Initializable
             }catch (Exception e){sl.setHighValue(2024);}
         });
     }
-    protected String getNameFile(String format)
+    protected String getNameFile(String format, int index)
     {
         TextInputDialog dialog = new TextInputDialog();  // create an instance
-        dialog.setTitle("Get Name File");
+        dialog.setTitle("Get File Name");
+        dialog.setHeaderText("File Name");
         dialog.setContentText("Type name");
         Optional<String> result = dialog.showAndWait();
+        if(result.get().isBlank() || result.get().isEmpty())
+        {
+                result= example.getCollection().getItems().get(index).getData().get(0).getTitle().describeConstable();
+        }
         return result.get()+format;
     };
     @FXML
@@ -448,20 +462,13 @@ public class ControllerIVL implements Initializable
             File file = new File("downloads");
             dc.setInitialDirectory(file);
             File filesave = dc.showDialog(ap.getScene().getWindow());
-            String name = getNameFile(finalFormat);
-            if(name.isBlank() || name.isEmpty())
-            {
-                name=example.getCollection().getItems().get(index).getData().get(0).getTitle();
-            }
+            String name = getNameFile(finalFormat, index);
             try {
-                download(name, v, wb.getEngine().getLocation(), String.valueOf(filesave)+"\\"+name);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
+                download(name, v, example.getCollection().getItems().get(index).getHrefs().get(0), String.valueOf(filesave)+"\\"+name);
+            } catch (IOException | InterruptedException | URISyntaxException e) {
+                System.out.println("Error");
             }
+            ;
             Label l = (new Label("File "+name+" is downloading"));
             l.setStyle("-fx-background-color: #38ea38; -fx-font-size: 20 ");
             v.getChildren().add(l);
@@ -515,7 +522,7 @@ public class ControllerIVL implements Initializable
         gp.add(createlabel(index), 2,0);
         gp.add(btncomeback, 0, 0);
     }
-    private static void download(String name,VBox v,String sourceURL, String targetDirectory) throws IOException, InterruptedException, URISyntaxException {
+    protected void download(String name,VBox v,String sourceURL, String targetDirectory) throws IOException, InterruptedException, URISyntaxException {
         Task<Void> task = new Task<Void>()
         {
             @Override
@@ -526,14 +533,17 @@ public class ControllerIVL implements Initializable
                 return null;
             }
         };
-        new Thread(task).start();
         task.setOnSucceeded((m)->
         {
+            new Thread(()->Platform.runLater(()->
+            {
                 Label label=new Label("File " + name + " is downloaded");
                 v.getChildren().clear();
                 label.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 20");
                 v.getChildren().add(label);
+            })).start();
         });
+        new Thread((task)).start();
     }
     protected Node createlabel(int index)
     {
@@ -584,15 +594,6 @@ public class ControllerIVL implements Initializable
         wb.prefWidth(100);
         wb.setPageFill(Color.TRANSPARENT);
     }
-    protected void changeStyleNode(Node wb)
-    {
-        wb.maxHeight(300);
-        wb.maxWidth(300);
-        wb.prefHeight(300);
-        wb.prefWidth(300);
-        wb.autosize();
-        wb.setDisable(true);
-    }
     public boolean getIsUser() {
         return isUser;
     }
@@ -620,9 +621,11 @@ public class ControllerIVL implements Initializable
             //InsertarServiciosController controlador = loader.getController();
             ControllerMenu controlador = loader.getController();
             controlador.setUser(isUser);
+            controlador.setAdmin(isAdmin());
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
-            currentRoot.setStyle("-fx-background-image: null");
+            currentRoot.setStyle("-fx-background-image: url('cielo.gif')");
+            currentRoot.setAlignment(Pos.CENTER);
             // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
 

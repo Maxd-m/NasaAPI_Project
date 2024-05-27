@@ -135,13 +135,14 @@ public class ControllerMenu implements Initializable {
 
             ControllerIVL controlador = loader.getController();
             controlador.setUser(isUser);
+            controlador.setAdmin(true);
 
             System.out.println(isUser);
 
             VBox currentRoot = (VBox) this.btnImageVideoLib.getScene().getRoot();
-            //currentRoot.setStyle("-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover");
+            currentRoot.setStyle("-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover");
             currentRoot.getChildren().setAll(root);
-            //currentRoot.setAlignment(Pos.TOP_CENTER);
+            currentRoot.setAlignment(Pos.TOP_CENTER);
 
         } catch (IOException ex) {
             Logger.getLogger(ControllerIVL.class.getName()).log(Level.SEVERE, null, ex);
@@ -222,7 +223,7 @@ public class ControllerMenu implements Initializable {
             //System.out.println(isUser);
 
             VBox currentRoot = (VBox) this.btnAPOD.getScene().getRoot();
-
+            currentRoot.setStyle("-fx-background-image: url('cielo.gif');");
             // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
 

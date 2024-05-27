@@ -25,7 +25,7 @@
     </Button>
   </ToolBar>
 
-  <Panel fx:id="mainPanel" style="-fx-background-image: url('fondoe2.jpg'); -fx-background-size: cover">
+  <Panel fx:id="mainPanel" style="-fx-background-color: black; -fx-background-size: cover">
     <heading>
       <Label style="-fx-text-fill: white" text="NASA Image and Video Library " styleClass="h3"/>
     </heading>

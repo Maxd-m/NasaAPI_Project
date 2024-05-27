@@ -96,36 +96,6 @@ public class ControllerAPOD implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
-
-
-
-        /*
-        * try {
-            if(!isOnline()){
-                Platform.runLater(()->{
-                    msgContainer.getStyleClass().add("alert-warning");
-                    msgTitle.setText("No internet! ");
-                    msgContent.setText("Check your internet connection and try again.");
-                    searchBtn.setDisable(true);
-                    btnReport.setDisable(true);
-                    btnSave.setDisable(true);
-                    datePicker.setDisable(true);
-                });
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        * */
-
-
-
-        // Scene sc = new Scene(new VBox());
-
-        //sc.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
     }
 
 
@@ -185,17 +155,8 @@ public class ControllerAPOD implements Initializable {
 
                         if(apod.getMedia_type().equals(new String("image"))){
                             Platform.runLater(()->{
-                                //image.setVisible(true);
-                                //webView.setVisible(false);
-                                //Image auxImage=new Image(apod.getUrl());
                                 webView.setVisible(true);
                                 webView.getEngine().load(apod.getUrl());
-
-                                //image=new ImageView(auxImage);
-                                //image.setImage(auxImage);
-                                //image.setFitWidth(300); // Ajusta el ancho según sea necesario
-                                //image.setPreserveRatio(true);
-
                             });
 
                             //mainVbox.getChildren().add(image);
@@ -203,13 +164,9 @@ public class ControllerAPOD implements Initializable {
                         }
                         else if (apod.getMedia_type().equals(new String("video"))) {
                             Platform.runLater(()->{
-                                //image.setVisible(false);
-                                // WebView wb = new WebView();
                                 webView.setVisible(true);
                                 webView.getEngine().load(apod.getUrl());
-                                //webView.setPrefSize(640,360);
                                 System.out.println("after video");
-                                //mainVbox.getChildren().add(wb);
                             });
 
                         }
@@ -230,28 +187,6 @@ public class ControllerAPOD implements Initializable {
                 catch (IOException e) {
                     System.out.println("error search: " +e.toString());}
             }).start();
-
-       /* }
-        else{
-            new Thread(()->{
-                Platform.runLater(()->{
-                    msgContainer.getStyleClass().add("alert-warning");
-                    msgTitle.setText("No internet ");
-                    msgContent.setText("Check your internet connection and try again.");
-                });
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                Platform.runLater(()->{
-                    msgContainer.setVisible(false);
-                });
-            }).start();
-
-            //loadingLabel.setText("NO Internet");
-        }*/
-
     }
 
     public void onDatePicked(ActionEvent actionEvent) {
@@ -300,53 +235,9 @@ public class ControllerAPOD implements Initializable {
               // Reemplazo el contenido del contenedor actual con el nuevo contenido
             currentRoot.getChildren().setAll(root);
 
-              /*
-              * // Creo la scene y el stage
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-
-            // Asocio el stage con el scene
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
-
-            // Indico que debe hacer al cerrar
-            //stage.setOnCloseRequest(e -> controlador.closeWindows());
-
-            // Ciero la ventana donde estoy
-            Stage myStage = (Stage) this.btnBack.getScene().getWindow();
-            myStage.close();
-              * */
-
-
         } catch (IOException ex) {
             Logger.getLogger(ControllerAPOD.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-        /*
-        * FXMLLoader loader = new FXMLLoader(getClass().getResource("menu-view.fxml"));
-        try {
-            Node view = loader.load();
-           // content.getChildren().setAll(view);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        * */
-
-        /*
-        * try {
-            root=FXMLLoader.load(HelloApplication.class.getResource("menu-view.fxml"));
-            stage=(Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-            scene=new Scene(root);
-            stage.setScene(scene);
-            stage.setMaximized(true);
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        * */
-
     }
 
     public boolean getIsUser() {

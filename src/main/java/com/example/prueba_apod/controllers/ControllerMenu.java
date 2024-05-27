@@ -135,7 +135,7 @@ public class ControllerMenu implements Initializable {
 
             ControllerIVL controlador = loader.getController();
             controlador.setUser(isUser);
-            controlador.setAdmin(true);
+            controlador.setAdmin(isAdmin);
 
             System.out.println(isUser);
 

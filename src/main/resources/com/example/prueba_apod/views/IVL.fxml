@@ -17,13 +17,15 @@
 <?import org.controlsfx.control.RangeSlider?>
 <VBox fx:id="ap" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.prueba_apod.controllers.ControllerIVL" alignment="TOP_CENTER"
-      style="-fx-background-image: url('../../../../fondoe.jpg'); -fx-background-size: cover">
+      >
+
   <ToolBar style="-fx-background-color: black">
     <Button fx:id="btnBack" text="Back" onAction="#onBackButtonClick" styleClass="btn,btn-default, btn-xs">
       <tooltip><Tooltip text="Go back to menu"/></tooltip>
     </Button>
   </ToolBar>
-  <Panel fx:id="mainPanel" style="-fx-background-color: black">
+
+  <Panel fx:id="mainPanel" style="-fx-background-image: url('fondoe2.jpg'); -fx-background-size: cover">
     <heading>
       <Label style="-fx-text-fill: white" text="NASA Image and Video Library " styleClass="h3"/>
     </heading>

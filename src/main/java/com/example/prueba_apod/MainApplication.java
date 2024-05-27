@@ -15,7 +15,6 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(MainApplication.class.getResource("views/innit-view.fxml"));
         Scene scene = new Scene(root);
-        //stage.getIcons().add(new Image("/images/nasa.png"));
         scene.getStylesheets().addAll(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("NASA API");
         stage.setMaximized(true);

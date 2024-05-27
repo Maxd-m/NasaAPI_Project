@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 
 import java.awt.*;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,8 +48,8 @@ public class ControllerAPOD implements Initializable {
     private Label contentLabel;
     @FXML
     private VBox contentVbox;
-    //@FXML
-    //private ImageView image;
+    @FXML
+    private Button btnReportUser;
     @FXML
     private WebView webView;
     @FXML
@@ -77,7 +78,7 @@ public class ControllerAPOD implements Initializable {
     private boolean isUser;
     private boolean isAdmin;
     private boolean flgLoading;
-    private String key;
+    private String key="DEMO_KEY";
 
 
     @Override
@@ -86,6 +87,8 @@ public class ControllerAPOD implements Initializable {
         webView.setVisible(false);
         mainPanel.getStyleClass().add("panel-default");
         //ActionEvent ae= new ActionEvent();
+
+
         try {
             onSearchButtonClick(new ActionEvent());
         } catch (IOException e) {
@@ -93,6 +96,10 @@ public class ControllerAPOD implements Initializable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+
+
+
 
         /*
         * try {
@@ -140,15 +147,21 @@ public class ControllerAPOD implements Initializable {
                     msgContainer.getStyleClass().add("alert-warning");
                     msgTitle.setText("Loading ");
                     msgContent.setText("Please wait");
-                });
+                    System.out.println("request0: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
 
+                });
+                String aux2="https://api.nasa.gov/planetary/apod?api_key="+"9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK"+"&date=" + datePicker.getValue().toString();
                 try {
-                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
+
+                    //System.out.println("request1: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
+                    URL url = new URL("https://api.nasa.gov/planetary/apod?api_key="+"9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK"+"&date=" + datePicker.getValue().toString());
+                    //System.out.println("request: "+"https://api.nasa.gov/planetary/apod?api_key="+getKey()+"&date=" + datePicker.getValue().toString());
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
                     conn.connect();
 
                     int responseCode = conn.getResponseCode();
+                    System.out.println("    rc:    "+responseCode);
                     if(responseCode!=200&&responseCode!=429){
                         throw new RuntimeException("Error "+responseCode);
                     }else{
@@ -214,8 +227,8 @@ public class ControllerAPOD implements Initializable {
                     }
 
                 }
-                catch (Exception e) {
-                    System.out.println("error: " +e.toString());}
+                catch (IOException e) {
+                    System.out.println("error search: " +e.toString());}
             }).start();
 
        /* }
@@ -277,7 +290,10 @@ public class ControllerAPOD implements Initializable {
             ControllerMenu controlador = loader.getController();
             controlador.setUser(isUser);
             controlador.setAdmin(isAdmin);
-            controlador.setCurrentUser(getCurrentUser());
+            if(currentUser!=null){
+                controlador.setCurrentUser(getCurrentUser());
+            }
+
 
             VBox currentRoot = (VBox) this.btnBack.getScene().getRoot();
 
@@ -342,9 +358,11 @@ public class ControllerAPOD implements Initializable {
         if(!isUser){
             btnSave.setVisible(false);
             btnReport.setVisible(false);
+            btnReportUser.setVisible(false);
         }else {
             btnSave.setVisible(true);
             btnReport.setVisible(true);
+            btnReportUser.setVisible(true);
         }
     }
 
@@ -362,7 +380,11 @@ public class ControllerAPOD implements Initializable {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
-        //System.out.println(this.currentUser.getId());
+        if(currentUser!=null){
+            System.out.println(this.currentUser.getId());
+
+        }
+
     }
 
     @FXML
@@ -376,6 +398,7 @@ public class ControllerAPOD implements Initializable {
                 msgContent.setText("Please wait");
                 msgContainer.setVisible(true);
             });
+            System.out.println("            save: "+currentUser.getName());
             if(dAPOD.save(apod,currentUser.getId())){
                 try {
                     Platform.runLater(()->{
@@ -399,15 +422,16 @@ public class ControllerAPOD implements Initializable {
 
     public void onReportButtonCLick(ActionEvent actionEvent) {
         new Thread(()->{
+            System.out.println("cick report");
             String dest = "reports/Report_APOD.pdf";
             btnReport.setDisable(true);
             btnBack.setDisable(true);
             try {
                 //getWeekImages();
-                new ReportAPOD().createReport(dest,getWeekImages());
+                new ReportAPOD().createReport(dest,getWeekImages(),"Last week APOD");
                 openFile(dest);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                //throw new RuntimeException(e);
             }
             btnReport.setDisable(false);
             btnBack.setDisable(false);
@@ -430,10 +454,11 @@ public class ControllerAPOD implements Initializable {
         List<APOD> apodList = new ArrayList<>();
 
         for (int i = 0; apodList.size() < 7; i++) {
+            System.out.println("for week: "+i);
          //   week.add(LocalDate.now().minusDays(i));
 
             //colocar codigo dentro de un ciclo para obtener apods de todas las fechas de week
-            URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=iofVxGYdLyuoYKgHtBS9DcdAXOoYitq60gm61Li9&date="+LocalDate.now().minusDays(i).toString());
+            URL url = new URL("https://api.nasa.gov/planetary/apod?api_key=9wR5BCEVPpBNbNg49cnajvOy1Ihch32OcAnPcaBK&date="+LocalDate.now().minusDays(i).toString());
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
@@ -485,5 +510,32 @@ public class ControllerAPOD implements Initializable {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public void onReportUserButtonCLick(ActionEvent actionEvent) {
+        Optional<List<APOD>> opt;
+        opt=new DAOapod().findKeysAPODuser(this.currentUser.getId());
+        System.out.println("busca keys");
+
+        if(opt.isPresent()){
+            List<APOD> apods = opt.get();
+            for (APOD a:apods){
+                System.out.println(a.toString());
+            }
+            System.out.println("sale for");
+            System.out.println("    apods: "+apods.size());
+
+            if(apods.size()>0){
+                String dest = "reports/Report_Saved_APOD_"+currentUser.getName()+".pdf";
+                try {
+                    new ReportAPOD().createReport(dest,apods,"Saved APOD");
+                    openFile(dest);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }else{
+            System.out.println("no hay nada");
+        }
     }
 }

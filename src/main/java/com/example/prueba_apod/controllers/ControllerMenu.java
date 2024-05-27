@@ -63,17 +63,18 @@ public class ControllerMenu implements Initializable {
             // Cargo la vista
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/prueba_apod/views/apod-view.fxml"));
 
-
             // Cargo el padre
             Parent root = loader.load();
 
             // Obtengo el controlador
-            //InsertarServiciosController controlador = loader.getController();
             ControllerAPOD controlador = loader.getController();
             controlador.setUser(isUser);
             controlador.setCurrentUser(getCurrentUser());
+             System.out.println("menu despues setUSer");
             controlador.setKey(getKey());
+             System.out.println("despues set key");
             controlador.setAdmin(isAdmin);
+             System.out.println("despues is admin");
 
              System.out.println(isUser);
 
@@ -138,9 +139,9 @@ public class ControllerMenu implements Initializable {
             System.out.println(isUser);
 
             VBox currentRoot = (VBox) this.btnImageVideoLib.getScene().getRoot();
-            currentRoot.setStyle("-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover");
+            //currentRoot.setStyle("-fx-background-image: url('fondoe.jpg'); -fx-background-size: cover");
             currentRoot.getChildren().setAll(root);
-            currentRoot.setAlignment(Pos.TOP_CENTER);
+            //currentRoot.setAlignment(Pos.TOP_CENTER);
 
         } catch (IOException ex) {
             Logger.getLogger(ControllerIVL.class.getName()).log(Level.SEVERE, null, ex);
@@ -191,6 +192,7 @@ public class ControllerMenu implements Initializable {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+        System.out.println(this.currentUser.getId());
     }
 
     @Override

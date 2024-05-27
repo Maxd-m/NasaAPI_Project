@@ -61,7 +61,7 @@
                                 <DatePicker fx:id="datePickerend" onAction="#onDatePicked" editable="false" />
                             </VBox-->
 
-                            <Button fx:id="btnSave" text="Save" styleClass="btn, btn-info" onAction="#onSaveButtonCLick">
+                            <Button fx:id="btnSave" text="Save" visible="false" styleClass="btn, btn-info" onAction="#onSaveButtonCLick">
                                 <tooltip><Tooltip text="Save Asteroid to database"/> </tooltip>
                             </Button>
                             <Button fx:id="btnReport" text="Report" styleClass="btn, btn-success" onAction="#onReportButtonCLick">

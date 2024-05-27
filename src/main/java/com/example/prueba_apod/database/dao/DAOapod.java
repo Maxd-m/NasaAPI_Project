@@ -2,8 +2,10 @@ package com.example.prueba_apod.database.dao;
 
 import com.example.prueba_apod.models.APOD;
 import com.example.prueba_apod.models.APODkey;
+import com.example.prueba_apod.models.User;
 import javafx.collections.FXCollections;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
@@ -190,8 +192,47 @@ public class DAOapod implements Dao<APOD,Integer> {
             }
 
         } catch (SQLException e) {
+            System.out.println("entra catch keys");
             throw new RuntimeException(e);
         }
         return keysList;
+    }
+
+    public Optional<List<APOD>> findKeysAPODuser(Integer id){
+        Optional<List<APOD>> opt = Optional.empty();
+        List<APOD> saved = FXCollections.observableArrayList();
+        String query="select *" +
+                "from archivos " +
+                "where url in (select url " +
+                            "from guardados " +
+                            "where id="+id+")";
+        try{
+            //PreparedStatement statement= conn.prepareStatement(query);
+            Statement statement = conn.createStatement();
+            ResultSet rs = statement.executeQuery(query);
+
+            //statement.setLong(1,id);
+            //ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                APOD apod = new APOD();
+                apod.setTitle(rs.getString("titulo"));
+                apod.setCopyright(rs.getString("copyright"));
+                apod.setUrl(rs.getString("url"));
+                apod.setDate(rs.getString("fecha"));
+                apod.setExplanation(rs.getString("explic"));
+                apod.setMedia_type(rs.getString("cveArch"));
+
+                saved.add(apod);
+                apod=null;
+            }
+            opt=Optional.of(saved);
+
+        }catch (SQLException e){
+            System.out.println("entra catch");
+            //throw new RuntimeException(e);
+        }
+
+
+        return opt;
     }
 }
